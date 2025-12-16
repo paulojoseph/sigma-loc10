@@ -155,6 +155,19 @@ docker compose exec api pytest
 docker compose exec web npm run lint
 ```
 
+---
+
+## 📚 Documentação Estendida (Deep Dive)
+
+Para não poluir o README principal, detalhei as decisões de engenharia na pasta [`.docs/`](./.docs). Recomendo a leitura para entender a profundidade do projeto:
+
+| Arquivo | Descrição |
+| :--- | :--- |
+| [**00_contexto_produto.md**](./.docs/00_contexto_produto.md) | 🧠 **Visão de Negócio:** O problema real que o software resolve e a filosofia *Risk-Driven*. |
+| [**01_stack_regras.md**](./.docs/01_stack_regras.md) | 👮 **Linter Humano:** Regras estritas de código, *Anti-patterns* proibidos e guia de estilo para IA. |
+| [**02_arquitetura.md**](./.docs/02_arquitetura.md) | 📐 **Diagramas:** Detalhamento do fluxo de dados, camadas de serviço e decisões de *Clean Arch*. |
+| [**03_matriz_risco.md**](./.docs/03_matriz_risco.md) | 🛡️ **Análise de Risco:** Tabela completa de riscos de negócio (Overbooking, Latência) e suas mitigações técnicas. |
+
 ## 🗺️ Roadmap (V2.0)
 Melhorias mapeadas para a próxima sprint:
 
