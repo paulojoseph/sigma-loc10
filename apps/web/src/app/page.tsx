@@ -6,13 +6,11 @@ import EquipmentList from '../components/EquipmentList';
 import Link from 'next/link';
 
 export default function Home() {
-  // Busca dados usando React Query
   const { data: equipment = [], isLoading } = useQuery({
     queryKey: ['equipment'],
     queryFn: EquipmentService.getAll,
   });
 
-  // Cálculos de Métricas (Simples e Eficiente)
   const totalAssets = equipment.length;
   const availableAssets = equipment.filter((e: Equipment) => e.status === 'AVAILABLE').length;
   const maintenanceAssets = equipment.filter((e: Equipment) => e.status === 'MAINTENANCE').length;
@@ -22,14 +20,12 @@ export default function Home() {
     <div className="min-h-screen bg-slate-50/50">
       <div className="container mx-auto px-4 py-8 max-w-7xl">
 
-        {/* Header Section */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-10 gap-4">
           <div>
             <h1 className="text-3xl font-bold text-slate-900 tracking-tight">Dashboard Operacional</h1>
             <p className="text-slate-500 mt-1">Visão geral da frota e disponibilidade em tempo real.</p>
           </div>
           <div className="flex gap-3">
-            {/* Link para o Admin do Django */}
             <Link
               href="http://localhost:8000/admin"
               target="_blank"
@@ -40,7 +36,6 @@ export default function Home() {
           </div>
         </div>
 
-        {/* KPI Cards (O "Dashboard" Visual) */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-10">
           <KpiCard title="Total de Ativos" value={totalAssets} icon="🚜" color="bg-white" />
           <KpiCard title="Disponíveis" value={availableAssets} icon="✅" color="bg-green-50 border-green-100 text-green-700" />
@@ -48,7 +43,6 @@ export default function Home() {
           <KpiCard title="Em Manutenção" value={maintenanceAssets} icon="🔧" color="bg-red-50 border-red-100 text-red-700" />
         </div>
 
-        {/* Listagem (Catálogo) */}
         <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
           <h2 className="text-xl font-bold text-slate-800 mb-6 flex items-center gap-2">
             📋 Inventário Recente
@@ -64,7 +58,6 @@ export default function Home() {
   );
 }
 
-// Grand Arch-Engineer Fix: Explicit Interface instead of 'any'
 interface KpiCardProps {
   title: string;
   value: number;
