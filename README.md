@@ -41,8 +41,12 @@ A solução foi orquestrada via Docker Compose para garantir paridade entre dese
 
 ```mermaid
 graph TD
+    %% Estilos Globais
+    classDef default fill:#2a2a2a,stroke:#555,stroke-width:2px,color:#fff;
+    classDef cluster fill:#1a1a1a,stroke:#444,stroke-width:2px,color:#eee,rx:5,ry:5;
+
     subgraph "Client Side"
-        Browser[Navegador do Usuário]
+        Browser[Navegador do Usuário]:::default
     end
 
     subgraph "Docker Compose Network"
@@ -51,14 +55,15 @@ graph TD
         DB[(Database<br/>PostgreSQL 16)]
     end
 
-    Browser -->|HTTPS / JSON| FE
-    FE -->|Server Side Fetching| API
-    Browser -->|Client Side Interactions| API
-    API -->|Read/Write| DB
+    Browser ==>|HTTPS / JSON| FE
+    FE ==>|Server Side Fetching| API
+    Browser -.->|Client Side Interactions| API
+    API ==>|Read/Write| DB
     
-    style FE fill:#e1f5fe,stroke:#01579b
-    style API fill:#e8f5e9,stroke:#2e7d32
-    style DB fill:#fff3e0,stroke:#ef6c00
+    %% Cores Vibrantes (Dark Mode Friendly)
+    style FE fill:#1565C0,stroke:#0D47A1,stroke-width:2px,color:#fff,rx:5,ry:5
+    style API fill:#2E7D32,stroke:#1B5E20,stroke-width:2px,color:#fff,rx:5,ry:5
+    style DB fill:#EF6C00,stroke:#E65100,stroke-width:2px,color:#fff
 ```
 
 ### UX na Prática (Optimistic UI)
