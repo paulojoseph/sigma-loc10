@@ -30,6 +30,8 @@ INSTALLED_APPS = [
     # Local
     'accounts',
     'core',
+    'agents', # <--- Adicione aqui
+    'equipment',  # <--- TEM QUE TER ISSO AQUI
 ]
 
 MIDDLEWARE = [
