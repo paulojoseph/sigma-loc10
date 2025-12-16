@@ -24,7 +24,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     
     # Third party
-    'rest_framework',
+    'rest_framework',      
+    'corsheaders',         
 
     # Local
     'accounts',
@@ -34,6 +35,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -113,3 +115,22 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Custom User Model
 AUTH_USER_MODEL = 'accounts.CustomUser'
+
+# --- DRF Configuration ---
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated', # Segurança por padrão: tudo é fechado
+    ],
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.SessionAuthentication', # Útil para o Admin navegável
+        # Futuramente adicionaremos JWT aqui
+    ],
+}
+
+# --- CORS Configuration ---
+# Em produção, você colocará o domínio real aqui.
+# Em desenvolvimento, liberamos o localhost do Frontend.
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+]
