@@ -1,19 +1,21 @@
-Set-Content .gitignore "
-# Python
+# Python / Django
 __pycache__/
 *.py[cod]
 *$py.class
-venv/
-.env
-.DS_Store
 
-# Node
-node_modules/
-.next/
-dist/
-build/
+# Ambientes Virtuais
+venv/
+.venv/
+env/
+
+# Variáveis de Ambiente e Segredos (CRÍTICO)
+.env
+.env.local
+
+# Banco de Dados Local
+db.sqlite3
+*.sqlite3
 
 # IDEs
 .vscode/
 .idea/
-"
