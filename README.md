@@ -1,6 +1,6 @@
-# 🚜 Sigma Loc | Enterprise Asset Management
+# 🚜 Sigma Loc10 | Enterprise Asset Management
 
-> **Technical Showcase**: Aplicação Full Stack desenvolvida com foco em **Arquitetura Resiliente**, **Escalabilidade** e **Mitigação de Riscos**.
+> **Technical Showcase:** Aplicação Full Stack desenvolvida com foco em **Arquitetura Resiliente**, **Escalabilidade** e **Experiência do Usuário (UX)**.
 
 <div align="center">
 
@@ -11,25 +11,33 @@
 
 </div>
 
-## 🎥 Showcase & Demo
+---
 
-*(Insira aqui o GIF/Vídeo demonstrando o fluxo: Dashboard -> Detalhe -> Aluguel -> Atualização Otimista)*
+## 🎯 Contexto & Produtividade
 
-> **Contexto:** Este projeto foi desenvolvido em 48h como um *Proof of Concept (PoC)* para demonstrar competências de Engenharia de Software Sênior, focando na integração robusta entre um Frontend moderno e um Backend Enterprise.
+Este projeto é um *Proof of Concept (PoC)* desenvolvido em **menos de 16 horas corridas**.
 
-## 🧠 Engenharia Orientada a Risco (Risk-Driven Engineering)
+O objetivo foi simular um cenário de pressão real para demonstrar como a união de **Experiência Sênior** (20 anos de mercado) com **Fluxos de IA Modernos** permite entregar software enterprise, testado e documentado, em tempo recorde. Não é apenas sobre codificar rápido, mas sobre arquitetar corretamente desde o primeiro minuto.
 
-Como Analista de Risco e Engenheiro Sênior, projetei o sistema antecipando falhas críticas de negócio:
+## 💎 Filosofia de Engenharia: Ética e Performance
 
-* **🛡️ Integridade de Estoque:** Prevenção de "Overbooking" (aluguel duplo) através de modelagem estrita no banco de dados e transações atômicas no Backend.
-* **📉 Dívida Técnica Controlada:** Adoção de **Service Pattern** no Frontend para blindar a UI de mudanças na API. Se o Backend mudar amanhã, refatoramos apenas a camada de serviço, não os componentes visuais.
-* **⚡ Alta Disponibilidade:** Frontend construído com *Next.js Standalone Build* em container otimizado e desacoplado da API. O catálogo permanece visível (leitura) mesmo se o serviço de transação oscilar.
+Minha abordagem no desenvolvimento é guiada por dois pilares inegociáveis, nascidos da minha experiência como Analista de Risco e como usuário exigente:
+
+### 1. UX-Driven (Obsessão pela Experiência)
+Software lento ou confuso é um desrespeito ao tempo do usuário.
+* **Tolerância Zero à Latência:** Implementei **Optimistic UI** porque o usuário não deve esperar o servidor "pensar" para ver o resultado de sua ação.
+* **Resiliência Visual:** O sistema deve parecer robusto. Tratamento de erros, *loading states* e feedbacks visuais não são "extras", são requisitos éticos de entrega.
+
+### 2. Risk-Driven (Engenharia Orientada a Risco)
+Segurança e consistência de dados protegem a saúde do negócio.
+* **🛡️ Integridade de Estoque:** Prevenção total de "Overbooking" através de transações atômicas (ACID) no Backend.
+* **📉 Dívida Técnica Controlada:** Adoção de **Service Pattern** no Frontend. A UI desconhece a lógica HTTP, facilitando refatorações futuras sem quebrar a tela do usuário.
 
 ---
 
 ## 🏗️ Arquitetura do Sistema
 
-O diagrama abaixo ilustra a orquestração via Docker Compose e o fluxo de dados entre os serviços.
+A solução foi orquestrada via Docker Compose para garantir paridade entre desenvolvimento e produção.
 
 ```mermaid
 graph TD
@@ -41,90 +49,63 @@ graph TD
         FE[Frontend Container<br/>Next.js 14 + React Query]
         API[Backend Container<br/>Django REST Framework]
         DB[(Database<br/>PostgreSQL 16)]
-        Cache[(Cache<br/>Redis)]
     end
 
     Browser -->|HTTPS / JSON| FE
     FE -->|Server Side Fetching| API
     Browser -->|Client Side Interactions| API
     API -->|Read/Write| DB
-    API -->|Cache Hit/Miss| Cache
     
     style FE fill:#e1f5fe,stroke:#01579b
     style API fill:#e8f5e9,stroke:#2e7d32
     style DB fill:#fff3e0,stroke:#ef6c00
 ```
 
-### Fluxo de Otimização (Optimistic UI)
-Demonstração visual de como o React Query melhora a UX durante o aluguel, atualizando a tela antes mesmo da resposta do servidor.
+### UX na Prática (Optimistic UI)
+O diagrama abaixo detalha o fluxo que implementei para eliminar a sensação de espera durante o aluguel:
 
 ```mermaid
 sequenceDiagram
     participant User
-    participant UI as React Component
-    participant Cache as React Query Cache
-    participant API as Django API
+    participant UI as Interface (React)
+    participant Cache as React Query
+    participant API as API (Django)
     
     User->>UI: Clica em "Alugar"
-    UI->>Cache: Mutate (Optimistic Update)
-    Cache-->>UI: Atualiza Status para "Alugado"
+    UI->>Cache: Atualiza UI Imediatamente (Optimistic)
+    Cache-->>UI: Status muda para "Alugado"
     Note over User, UI: UX Instantânea (0ms Latency)
     
-    UI->>API: PATCH /equipment/{id}/
+    UI->>API: POST /api/rents/
     
     alt Sucesso
-        API-->>UI: 200 OK (Dados Persistidos)
-        UI->>Cache: Invalidate & Refetch (Consistência Final)
+        API-->>UI: 200 OK (Confirmado)
+        UI->>Cache: Revalida Dados Reais
     else Falha
-        API-->>UI: 4xx/5xx Error
+        API-->>UI: Erro 4xx/5xx
         UI->>Cache: Rollback para "Disponível"
-        UI-->>User: Toast de Erro
+        UI-->>User: Notificação de Erro
     end
 ```
 
 ## 🛠️ Stack Tecnológico
 
-### Frontend (Client-Side) | Next.js 14 + React Query
-A escolha do stack não foi baseada em "hype", mas em resolução de problemas:
+### Frontend | Next.js 14 + React Query
+A escolha do stack foi pragmática, focada em resolver dores reais de performance:
 
-- **TanStack Query (v5):** Em vez de reinventar a roda com useEffect e gerenciamento manual de loading/error states, utilizei React Query para Server State Management.
-  > **Ganho:** Cache automático, deduplicação de requests e Optimistic Updates.
+- **TanStack Query (v5):** Elimina a necessidade de useEffect manuais e garante cache inteligente.
+- **Service Layer Desacoplada:** Isolamento total da lógica de API em `src/services`, garantindo tipos estritos (TypeScript).
+- **Design System:** TailwindCSS + Lucide Icons para interface limpa, acessível e consistente.
 
-- **Service Layer Desacoplada:** Toda a lógica de comunicação HTTP reside em `src/services`, retornando tipos estritos (TypeScript Interfaces).
+### Backend | Django REST Framework
+Escolhido pela segurança padrão ("batteries-included") e velocidade de implementação:
 
-- **Design System:** TailwindCSS + Lucide Icons para rápida iteração visual sem perder a consistência de um design system enterprise.
-
-### Backend (Server-Side) | Django REST Framework
-Escolhido pela segurança padrão ("batteries-included") e velocidade de desenvolvimento:
-
-- **Arquitetura Modular:** Divisão clara de contextos (`core`, `accounts`, `equipment`) facilitando a manutenção futura ou migração para microsserviços.
-
-- **Django Admin Customizado:** Utilização do painel nativo para operações de Backoffice, economizando centenas de horas de desenvolvimento de interfaces CRUD internas.
-
-- **Serializers Robustos:** Validação de dados na entrada (Input sanitization) antes de tocar o banco de dados.
-
-## 📂 Estrutura do Projeto
-A organização reflete padrões de Clean Architecture:
-
-```text
-sigma-loc10/
-├── apps/
-│   ├── api/                 # Django (Backend)
-│   │   ├── equipment/       # Domain: Gestão de Ativos
-│   │   ├── core/            # Configs e Utils
-│   │   └── fixtures/        # Dados iniciais (Seed)
-│   └── web/                 # Next.js (Frontend)
-│       ├── src/
-│       │   ├── app/         # App Router (Pages)
-│       │   ├── components/  # Atomic Components (Modals, Cards)
-│       │   ├── services/    # API Layer (Axios/Fetch Wrappers)
-│       │   └── providers/   # Contexts (React Query, Toast)
-├── docker-compose.yml       # Orquestração
-└── README.md
-```
+- **Arquitetura Modular:** Separação clara de contextos (`core`, `accounts`, `equipment`) facilitando futura extração para microsserviços.
+- **Django Admin:** Utilizado como Backoffice administrativo, economizando centenas de horas de desenvolvimento.
+- **Serializers:** Validação estrita de entrada (Sanitization) para garantir que nenhum dado sujo entre no banco.
 
 ## 🚀 Instalação e Execução (Zero-Config)
-Utilizamos Docker para garantir que o ambiente seja reprodutível em qualquer OS (Windows/Linux/Mac).
+O ambiente é 100% Dockerizado para garantir reprodutibilidade.
 
 ### 1. Clone e Suba
 
@@ -132,45 +113,49 @@ Utilizamos Docker para garantir que o ambiente seja reprodutível em qualquer OS
 git clone https://github.com/SEU_USUARIO/sigma-loc10.git
 cd sigma-loc10
 
-# Sobe Backend, Frontend, Redis e Postgres
-docker compose up -d --build
+# Sobe todo o ecossistema (Front, Back e Banco)
+docker compose up --build
 ```
-Aguarde o build finalizar. O Frontend estará disponível em `http://localhost:3000`.
+Aguarde o build. O sistema estará disponível em:
+- **Frontend:** http://localhost:3000
+- **API:** http://localhost:8000/api/
 
-### 2. Popule o Banco de Dados (Data Seeding)
-Para visualizar o dashboard preenchido, execute o script de carga de dados:
+### 2. Carga de Dados (Seed)
+Para ver o dashboard preenchido com equipamentos de teste:
 
 ```bash
 docker compose exec api python manage.py loaddata initial_data.json
 ```
 
-### 3. Acessos
-- **Aplicação:** `http://localhost:3000`
-- **API Docs:** `http://localhost:8000/api/`
-- **Admin Panel:** `http://localhost:8000/admin`
+### 3. Acesso Administrativo
+Para acessar o painel `/admin`, crie um superusuário:
 
-Para acessar o admin, crie um superusuário:
 ```bash
 docker compose exec api python manage.py createsuperuser
 ```
 
-## 🧪 Qualidade e Testes
-Pipeline de CI configurado via GitHub Actions para garantir integridade.
+## 🧪 Qualidade e CI/CD
+Qualidade não é opcional. O projeto conta com pipeline no GitHub Actions validando cada commit:
 
-**Frontend:** Testes unitários focados em regras de negócio (ex: cálculo de diárias) usando Jest.
+- **Frontend Check:** Linting (ESLint) e verificação de Build.
+- **Backend Check:** Testes de integração (Pytest) rodando contra banco PostgreSQL efêmero.
+
+Para rodar localmente:
 
 ```bash
-docker compose exec frontend npm test
+# Testes do Backend
+docker compose exec api pytest
+
+# Lint do Frontend
+docker compose exec web npm run lint
 ```
 
-**Backend:** Testes de integração planejados com PyTest.
+## 🗺️ Roadmap (V2.0)
+Melhorias mapeadas para a próxima sprint:
 
-## 🗺️ Roadmap Técnico
-O que eu faria com mais tempo (V2.0):
-
-- [ ] **Autenticação Segura:** Implementar NextAuth.js com JWT e Refresh Tokens (HttpOnly Cookies).
-- [ ] **Concorrência Real:** Implementar `select_for_update` no Postgres para evitar condições de corrida em alugueis simultâneos.
-- [ ] **Infraestrutura:** Pipeline de CD automatizado para Vercel (Front) e Railway (Back).
+- [ ] **Segurança:** Implementar autenticação via JWT com rotação de chaves.
+- [ ] **Concorrência:** Adicionar `select_for_update` no Postgres para travar linhas em cenários de alta concorrência.
+- [ ] **Infra:** Deploy automatizado na Vercel (Front) e Railway (Back).
 
 ---
-*Desenvolvido por Paulo Joseph*
+*Desenvolvido por Paulo Marques*
