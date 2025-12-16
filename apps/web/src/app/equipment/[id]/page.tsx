@@ -1,202 +1,177 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import Link from 'next/link';
 import { toast } from 'sonner';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import ConfirmModal from '@/components/ConfirmModal';
 import RentModal from '@/components/RentModal';
-
-interface Equipment {
-  id: string;
-  name: string;
-  description: string;
-  daily_rate: string;
-  status: 'AVAILABLE' | 'RENTED' | 'MAINTENANCE';
-  created_at: string;
-}
+import { EquipmentService } from '@/services/equipmentService';
+import api from '@/services/api';
+import { ArrowLeft, CheckCircle2, AlertTriangle, PenTool, CalendarClock, ShieldCheck } from 'lucide-react';
 
 export default function EquipmentDetail({ params }: { params: { id: string } }) {
-  const [item, setItem] = useState<Equipment | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [processing, setProcessing] = useState(false);
+  const queryClient = useQueryClient();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isRentModalOpen, setIsRentModalOpen] = useState(false);
 
-  // Estados dos Modais
-  const [isModalOpen, setIsModalOpen] = useState(false);      // Manutenção
-  const [isRentModalOpen, setIsRentModalOpen] = useState(false); // Locação
+  // Queries & Mutations
+  const { data: item, isLoading, isError } = useQuery({
+    queryKey: ['equipment', params.id],
+    queryFn: () => EquipmentService.getById(params.id),
+    retry: 1
+  });
 
-  useEffect(() => {
-    fetchEquipment();
-  }, [params.id]);
+  const mutationStatus = useMutation({
+    mutationFn: async (newStatus: string) => {
+      const response = await api.patch(`/equipment/${params.id}/`, { status: newStatus });
+      return response.data;
+    },
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: ['equipment', params.id] });
+      queryClient.invalidateQueries({ queryKey: ['equipment'] });
+      toast.success(`Status atualizado para ${data.status}`);
+      setIsModalOpen(false);
+    },
+    onError: () => toast.error("Erro ao atualizar status.")
+  });
 
-  const fetchEquipment = () => {
-    fetch(`http://localhost:8000/api/equipment/${params.id}/`)
-      .then((res) => res.json())
-      .then((data) => {
-        setItem(data);
-        setLoading(false);
-      })
-      .catch((err) => console.error(err));
-  };
+  const mutationRent = useMutation({
+    mutationFn: async (rentalData: { status: string; clientName: string }) => {
+      const response = await api.patch(`/equipment/${params.id}/`, { status: 'RENTED' });
+      return response.data;
+    },
+    onSuccess: (_, variables) => {
+      queryClient.invalidateQueries({ queryKey: ['equipment', params.id] });
+      queryClient.invalidateQueries({ queryKey: ['equipment'] });
+      toast.success(`Alugado para ${variables.clientName}`);
+      setIsRentModalOpen(false);
+    },
+    onError: () => toast.error("Erro ao processar locação.")
+  });
 
-  // --- AÇÃO 1: Manutenção ---
-  const handleMaintenance = async () => {
-    if (!item) return;
-    setProcessing(true);
-
-    const newStatus = item.status === 'MAINTENANCE' ? 'AVAILABLE' : 'MAINTENANCE';
-    const actionName = newStatus === 'MAINTENANCE' ? 'entrada em manutenção' : 'liberação do equipamento';
-
-    try {
-      const res = await fetch(`http://localhost:8000/api/equipment/${item.id}/`, {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ status: newStatus }),
-      });
-
-      if (res.ok) {
-        fetchEquipment();
-        toast.success(`Sucesso! A ${actionName} foi registrada.`);
-      } else {
-        toast.error('Erro ao atualizar status. Tente novamente.');
-      }
-    } catch (error) {
-      console.error(error);
-      toast.error('Erro de conexão com o servidor.');
-    } finally {
-      setProcessing(false);
-    }
-  };
-
-  // --- AÇÃO 2: Locação (Aluguel) ---
-  const handleRentConfirm = async (rentalData: { clientName: string; startDate: string; endDate: string }) => {
-    if (!item) return;
-    setProcessing(true);
-
-    try {
-      // Simulação: Atualiza status para RENTED (Num app real, criaria o contrato via POST)
-      const res = await fetch(`http://localhost:8000/api/equipment/${item.id}/`, {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          status: 'RENTED',
-          // Aqui poderíamos enviar rentalData para um endpoint de contratos
-        }),
-      });
-
-      if (res.ok) {
-        fetchEquipment();
-        toast.success(`Contrato gerado para ${rentalData.clientName}! Equipamento alugado.`);
-        console.log("Dados do Contrato:", rentalData);
-      } else {
-        toast.error('Erro ao realizar locação.');
-      }
-    } catch (error) {
-      console.error(error);
-      toast.error('Erro de conexão.');
-    } finally {
-      setProcessing(false);
-    }
-  };
-
-  if (loading) return <div className="p-10 text-center">Carregando detalhes...</div>;
-  if (!item) return <div className="p-10 text-center text-red-500">Equipamento não encontrado.</div>;
+  if (isLoading) return <div className="min-h-screen flex items-center justify-center text-slate-400">Carregando...</div>;
+  if (isError || !item) return <div className="min-h-screen flex items-center justify-center text-red-500">Equipamento não encontrado.</div>;
 
   const isMaintenance = item.status === 'MAINTENANCE';
+  const isRented = item.status === 'RENTED';
+  const isAvailable = item.status === 'AVAILABLE';
 
   return (
-    <div className="min-h-screen bg-gray-50 p-8">
+    <div className="min-h-screen pb-20">
 
-      {/* 1. Modal de Manutenção */}
+      {/* Modais */}
       <ConfirmModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
-        onConfirm={handleMaintenance}
-        title={isMaintenance ? "Finalizar Manutenção?" : "Agendar Manutenção?"}
+        onConfirm={() => mutationStatus.mutate(isMaintenance ? 'AVAILABLE' : 'MAINTENANCE')}
+        title={isMaintenance ? "Concluir Manutenção" : "Enviar para Manutenção"}
         description={isMaintenance
-          ? "O equipamento voltará a ficar disponível para locação imediatamente."
-          : "O equipamento ficará indisponível para novos contratos até a conclusão do serviço."}
-        confirmText={isMaintenance ? "Liberar Equipamento" : "Confirmar Manutenção"}
+          ? "Confirmar que o equipamento está apto para voltar à frota?"
+          : "O equipamento ficará indisponível durante o período."}
+        confirmText={isMaintenance ? "Liberar" : "Confirmar Manutenção"}
         isDestructive={!isMaintenance}
       />
 
-      {/* 2. Modal de Locação */}
       <RentModal
         isOpen={isRentModalOpen}
         onClose={() => setIsRentModalOpen(false)}
-        onConfirm={handleRentConfirm}
-        dailyRate={parseFloat(item.daily_rate)}
+        onConfirm={(data) => mutationRent.mutate({ status: 'RENTED', clientName: data.clientName })}
+        dailyRate={parseFloat(item.daily_rate as any)}
         equipmentName={item.name}
       />
 
-      <div className="max-w-4xl mx-auto">
-        <Link href="/" className="text-gray-500 hover:text-blue-600 mb-6 inline-block text-sm">
-          ← Voltar para a Frota
+      {/* Main Content: Asymmetric Grid */}
+      <div className="container mx-auto px-6 pt-8">
+        <Link href="/" className="inline-flex items-center gap-2 text-sm text-slate-500 hover:text-slate-900 transition-colors mb-8 group">
+          <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" />
+          Voltar para Dashboard
         </Link>
 
-        <div className="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-100">
-          {/* Header */}
-          <div className="bg-slate-900 p-8 text-white flex justify-between items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-10 items-start">
+
+          {/* Coluna Esquerda: Detalhes (2/3) */}
+          <div className="lg:col-span-2 space-y-8">
             <div>
-              <h1 className="text-3xl font-bold">{item.name}</h1>
-              <p className="text-slate-400 mt-2 text-sm">ID: {item.id}</p>
-            </div>
-            <div className="text-right">
-              <p className="text-sm opacity-70">Valor Diária</p>
-              <p className="text-3xl font-bold text-green-400">
-                R$ {parseFloat(item.daily_rate).toFixed(2)}
+              <div className="flex items-center gap-3 mb-4">
+                <span className={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider flex items-center gap-2 w-fit
+                   ${isAvailable ? 'bg-emerald-100 text-emerald-700' :
+                    isRented ? 'bg-blue-100 text-blue-700' :
+                      'bg-amber-100 text-amber-700'}`}>
+                  {isAvailable && <CheckCircle2 size={12} />}
+                  {isRented && <CalendarClock size={12} />}
+                  {isMaintenance && <AlertTriangle size={12} />}
+                  {item.status}
+                </span>
+                <span className="text-slate-400 text-xs font-mono">ID: {item.id}</span>
+              </div>
+              <h1 className="text-4xl font-extrabold text-slate-900 tracking-tight leading-tight mb-6">
+                {item.name}
+              </h1>
+              <p className="text-lg text-slate-600 leading-relaxed">
+                {item.description}
               </p>
+            </div>
+
+            {/* Specs Grid */}
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 border-y border-slate-100 py-8">
+              <div className="p-4 bg-white rounded-xl border border-slate-100 shadow-sm">
+                <div className="text-slate-400 text-xs uppercase font-bold mb-1">Categoria</div>
+                <div className="font-medium text-slate-900">Pesado</div>
+              </div>
+              <div className="p-4 bg-white rounded-xl border border-slate-100 shadow-sm">
+                <div className="text-slate-400 text-xs uppercase font-bold mb-1">Ano Modelo</div>
+                <div className="font-medium text-slate-900">2024</div>
+              </div>
+              <div className="p-4 bg-white rounded-xl border border-slate-100 shadow-sm">
+                <div className="text-slate-400 text-xs uppercase font-bold mb-1">Seguro</div>
+                <div className="font-medium text-green-600 flex items-center gap-1">
+                  <ShieldCheck size={14} /> Ativo
+                </div>
+              </div>
             </div>
           </div>
 
-          <div className="p-8">
-            {/* Status Badge */}
-            <div className="flex items-center gap-4 mb-8">
-              <span className="text-gray-600 font-medium">Status Atual:</span>
-              <span className={`px-3 py-1 rounded-full text-sm font-bold 
-                 ${item.status === 'AVAILABLE' ? 'bg-green-100 text-green-700' :
-                  item.status === 'RENTED' ? 'bg-blue-100 text-blue-700' :
-                    'bg-red-100 text-red-700'}`}>
-                {item.status}
-              </span>
-            </div>
+          {/* Coluna Direita: Sticky Action Card (1/3) */}
+          <div className="lg:col-span-1 lg:sticky lg:top-24">
+            <div className="bg-white rounded-2xl shadow-xl shadow-slate-200/50 border border-slate-100 p-6">
+              <div className="flex justify-between items-baseline mb-8">
+                <span className="text-slate-500 font-medium">Valor Diária</span>
+                <span className="text-3xl font-bold text-slate-900">
+                  R$ {parseFloat(item.daily_rate as any).toFixed(2)}
+                </span>
+              </div>
 
-            <h3 className="text-xl font-semibold text-gray-800 mb-4">Descrição Técnica</h3>
-            <p className="text-gray-600 leading-relaxed text-lg mb-8">
-              {item.description}
-            </p>
+              <div className="space-y-3">
+                <button
+                  onClick={() => setIsRentModalOpen(true)}
+                  disabled={!isAvailable}
+                  className={`w-full py-3.5 px-4 rounded-xl font-bold text-white shadow-lg transition-all flex items-center justify-center gap-2
+                       ${isAvailable
+                      ? 'bg-blue-600 hover:bg-blue-700 hover:shadow-blue-200 hover:-translate-y-0.5'
+                      : 'bg-slate-100 text-slate-400 cursor-not-allowed shadow-none'}`}
+                >
+                  {isAvailable ? 'Iniciar Locação' : 'Indisponível'}
+                </button>
 
-            {/* Área de Ação */}
-            <div className="border-t pt-8 flex gap-4">
+                <button
+                  onClick={() => setIsModalOpen(true)}
+                  disabled={isRented}
+                  className={`w-full py-3.5 px-4 rounded-xl font-bold border-2 transition-all flex items-center justify-center gap-2
+                       ${isMaintenance
+                      ? 'border-emerald-100 bg-emerald-50 text-emerald-700 hover:bg-emerald-100'
+                      : 'border-slate-100 bg-white text-slate-600 hover:border-slate-200 hover:text-slate-900'}`}
+                >
+                  <PenTool size={16} />
+                  {isMaintenance ? 'Concluir Manutenção' : 'Registrar Manutenção'}
+                </button>
+              </div>
 
-              {/* Botão de Aluguel */}
-              <button
-                onClick={() => setIsRentModalOpen(true)}
-                disabled={item.status !== 'AVAILABLE'}
-                className={`flex-1 py-3 px-6 rounded-lg font-bold text-white transition-all
-                  ${item.status === 'AVAILABLE'
-                    ? 'bg-blue-600 hover:bg-blue-700 shadow-blue-200 shadow-lg'
-                    : 'bg-blue-100 text-blue-400 cursor-not-allowed'}`}
-              >
-                {item.status === 'AVAILABLE'
-                  ? 'Alugar Agora'
-                  : item.status === 'RENTED'
-                    ? 'Atualmente Alugado'
-                    : 'Em Manutenção'}
-              </button>
-
-              {/* Botão de Manutenção */}
-              <button
-                onClick={() => setIsModalOpen(true)}
-                disabled={processing || item.status === 'RENTED'}
-                className={`px-6 py-3 border rounded-lg font-medium transition-colors
-                  ${isMaintenance
-                    ? 'bg-green-50 border-green-200 text-green-700 hover:bg-green-100'
-                    : 'border-gray-300 text-gray-700 hover:bg-gray-50'}
-                  ${processing ? 'opacity-50 cursor-wait' : ''}
-                `}
-              >
-                {isMaintenance ? 'Finalizar Manutenção' : 'Agendar Manutenção'}
-              </button>
+              <div className="mt-6 text-center">
+                <p className="text-xs text-slate-400 leading-relaxed">
+                  Ao alugar, você concorda com os Termos de Serviço da Sigma Loc. O faturamento ocorre na devolução.
+                </p>
+              </div>
             </div>
           </div>
         </div>

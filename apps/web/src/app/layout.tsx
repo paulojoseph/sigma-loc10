@@ -1,10 +1,13 @@
 import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
-import { Toaster } from 'sonner'; // <--- 1. Importe aqui
+// 1. Fonte comentada para evitar erro de timeout no Docker
+// import { Inter } from 'next/font/google'; 
+import { Toaster } from 'sonner';
 import Navbar from '../components/Navbar';
+import Providers from '../components/Providers'; // Essencial para o React Query
 import './globals.css';
 
-const inter = Inter({ subsets: ['latin'] });
+// 2. Configuração da fonte comentada
+// const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
   title: 'Sigma Loc | Gestão de Ativos',
@@ -18,14 +21,15 @@ export default function RootLayout({
 }) {
   return (
     <html lang="pt-BR">
-      <body className={`${inter.className} bg-slate-50 min-h-screen`}>
-        <Navbar />
-        <main className="pt-6">
-          {children}
-        </main>
-
-        {/* 2. Adicione o componente aqui */}
-        <Toaster richColors position="top-right" />
+      {/* 3. Usamos 'font-sans' genérico em vez da classe da Inter */}
+      <body className="font-sans bg-slate-50 min-h-screen">
+        <Providers>
+          <Navbar />
+          <main className="pt-6">
+            {children}
+          </main>
+          <Toaster richColors position="top-right" />
+        </Providers>
       </body>
     </html>
   );

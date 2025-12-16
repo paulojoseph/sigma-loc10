@@ -1,97 +1,93 @@
 'use client'
 
-import { useEffect, useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import { EquipmentService } from '../services/equipmentService';
 import Link from 'next/link';
-
-// Tipagem para TypeScript (Senioridade: Type Safety)
-interface Equipment {
-  id: string;
-  name: string;
-  description: string;
-  daily_rate: string;
-  status: 'AVAILABLE' | 'RENTED' | 'MAINTENANCE';
-}
+import { ArrowRight, Calendar, Hammer, Truck } from 'lucide-react';
 
 export default function EquipmentList() {
-  const [equipment, setEquipment] = useState<Equipment[]>([]);
-  const [loading, setLoading] = useState(true);
+  const { data: equipment, isLoading, isError } = useQuery({
+    queryKey: ['equipment'],
+    queryFn: EquipmentService.getAll,
+  });
 
-  useEffect(() => {
-    // Busca os dados da API
-    fetch('http://localhost:8000/api/equipment/')
-      .then((res) => res.json())
-      .then((data) => {
-        setEquipment(data);
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.error("Erro ao buscar equipamentos:", err);
-        setLoading(false);
-      });
-  }, []);
+  if (isLoading) return <div className="p-12 text-center text-slate-400 animate-pulse">Carregando frota...</div>;
+  if (isError) return <div className="p-12 text-center text-red-500 bg-red-50 rounded-lg">Erro ao carregar dados.</div>;
 
-  // Função auxiliar para cores de status (UI/UX)
-  const getStatusColor = (status: string) => {
+  const list = equipment || [];
+
+  const getStatusConfig = (status: string) => {
     switch (status) {
-      case 'AVAILABLE': return 'bg-green-100 text-green-800 border-green-200';
-      case 'RENTED': return 'bg-blue-100 text-blue-800 border-blue-200';
-      case 'MAINTENANCE': return 'bg-red-100 text-red-800 border-red-200';
-      default: return 'bg-gray-100 text-gray-800';
+      case 'AVAILABLE': return { label: 'Disponível', color: 'bg-emerald-100 text-emerald-700 border-emerald-200' };
+      case 'RENTED': return { label: 'Alugado', color: 'bg-blue-100 text-blue-700 border-blue-200' };
+      case 'MAINTENANCE': return { label: 'Manutenção', color: 'bg-amber-100 text-amber-700 border-amber-200' };
+      default: return { label: status, color: 'bg-slate-100 text-slate-700 border-slate-200' };
     }
   };
 
-  const translateStatus = (status: string) => {
-    const map: Record<string, string> = {
-      'AVAILABLE': 'Disponível',
-      'RENTED': 'Alugado',
-      'MAINTENANCE': 'Manutenção'
-    };
-    return map[status] || status;
-  }
-
-  if (loading) return <div className="p-8 text-center text-gray-500">Carregando frota...</div>;
-
   return (
-    <div className="p-6 bg-gray-50 text-gray-900">
-      <h2 className="text-2xl font-bold mb-6 text-gray-800 border-b pb-2">
-        🚜 Frota Sigma Loc
-      </h2>
+    <div className="container mx-auto px-6 py-8">
+      <header className="flex justify-between items-end mb-10">
+        <div>
+          <h1 className="text-3xl font-bold text-slate-900 tracking-tight">Dashboard de Frota</h1>
+          <p className="text-slate-500 mt-2">Gerencie seus ativos, contratos e manutenções em tempo real.</p>
+        </div>
+        <div className="hidden sm:block">
+          <span className="text-sm font-medium text-slate-500 bg-white px-3 py-1 rounded-full border shadow-sm">
+            Total: {list.length} ativos
+          </span>
+        </div>
+      </header>
 
-      {/* Grid Responsivo */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {equipment.map((item) => (
-          <div key={item.id} className="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 overflow-hidden border border-gray-100">
-            <div className="p-5">
-              <div className="flex justify-between items-start mb-2">
-                <h3 className="text-lg font-semibold text-gray-900">{item.name}</h3>
-                <span className={`text-xs px-2 py-1 rounded-full border font-medium ${getStatusColor(item.status)}`}>
-                  {translateStatus(item.status)}
-                </span>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        {list.map((item) => {
+          const status = getStatusConfig(item.status);
+
+          return (
+            <Link
+              key={item.id}
+              href={`/equipment/${item.id}`}
+              className="group bg-white rounded-xl border border-slate-200 hover:border-blue-300 shadow-sm hover:shadow-md transition-all duration-200 flex flex-col overflow-hidden"
+            >
+              <div className="p-5 flex-1">
+                <div className="flex justify-between items-start mb-4">
+                  <div className="p-2 bg-slate-50 rounded-lg group-hover:bg-blue-50 transition-colors">
+                    <Truck className="w-6 h-6 text-slate-400 group-hover:text-blue-600 transition-colors" />
+                  </div>
+                  <span className={`text-[11px] px-2.5 py-1 rounded-full border font-semibold tracking-wide uppercase ${status.color}`}>
+                    {status.label}
+                  </span>
+                </div>
+
+                <h3 className="font-bold text-slate-900 mb-1 group-hover:text-blue-600 transition-colors">{item.name}</h3>
+                <p className="text-slate-500 text-sm line-clamp-2 h-10 leading-relaxed mb-4">
+                  {item.description}
+                </p>
+
+                <div className="flex items-center gap-4 text-xs text-slate-400 mb-4 border-t border-slate-50 pt-3">
+                  <div className="flex items-center gap-1">
+                    <Calendar className="w-3 h-3" />
+                    <span>2024</span>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <Hammer className="w-3 h-3" />
+                    <span>Rev: 02/24</span>
+                  </div>
+                </div>
               </div>
 
-              <p className="text-gray-600 text-sm mb-4 h-10 line-clamp-2">
-                {item.description}
-              </p>
-
-              <div className="flex justify-between items-center mt-4 pt-4 border-t border-gray-100">
-                <span className="text-xs text-gray-500">Diária</span>
-                <span className="text-xl font-bold text-blue-600">
-                  R$ {parseFloat(item.daily_rate).toFixed(2)}
-                </span>
+              <div className="bg-slate-50 px-5 py-3 border-t border-slate-100 flex justify-between items-center">
+                <div className="flex flex-col">
+                  <span className="text-[10px] uppercase text-slate-400 font-bold tracking-wider">Diária</span>
+                  <span className="font-bold text-slate-900">R$ {parseFloat(item.daily_rate).toFixed(2)}</span>
+                </div>
+                <div className="w-8 h-8 rounded-full bg-white border border-slate-200 flex items-center justify-center text-slate-400 group-hover:bg-blue-600 group-hover:border-blue-600 group-hover:text-white transition-all">
+                  <ArrowRight size={14} />
+                </div>
               </div>
-            </div>
-
-            {/* Botão de Ação Fake */}
-            <div className="bg-gray-50 px-5 py-3 border-t border-gray-100 text-right">
-              <Link
-                href={`/equipment/${item.id}`}
-                className="text-sm font-medium text-blue-600 hover:text-blue-800 transition-colors inline-block"
-              >
-                Ver Detalhes →
-              </Link>
-            </div>
-          </div>
-        ))}
+            </Link>
+          )
+        })}
       </div>
     </div>
   );
