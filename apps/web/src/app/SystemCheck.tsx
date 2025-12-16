@@ -21,8 +21,8 @@ export default function SystemCheck() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          username: '', // Preencher ao testar
-          password: ''  // Preencher ao testar
+          username: 'admin', // Insira o usuário
+          password: 'admin123'// Insira a senha (se for esta que você usou)
         }),
       });
 
@@ -62,8 +62,8 @@ export default function SystemCheck() {
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-xl font-semibold text-white">Diagnóstico Sigma Nexus</h2>
         <span className={`h-3 w-3 rounded-full ${status === 'idle' ? 'bg-gray-500' :
-            status === 'loading' ? 'bg-yellow-500 animate-pulse' :
-              status === 'success' ? 'bg-green-500' : 'bg-red-500'
+          status === 'loading' ? 'bg-yellow-500 animate-pulse' :
+            status === 'success' ? 'bg-green-500' : 'bg-red-500'
           }`} />
       </div>
 

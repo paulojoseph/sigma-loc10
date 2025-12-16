@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   db:
     image: postgres:16-alpine
@@ -25,23 +23,20 @@ services:
       - redis_data:/data
 
 
-  backend:
+  api: # <-- Renomeado de 'backend' para 'api'
     build: 
       context: ./apps/api
       dockerfile: Dockerfile
+    command: >
+      sh -c "python manage.py makemigrations accounts &&
+             python manage.py migrate --no-input &&
+             python manage.py runserver 0.0.0.0:8000" # <-- Comando de migração adicionado
     volumes:
-      - ./apps/api:/app
+      - ./apps/api:/usr/src/app # <-- Mudar de /app para /usr/src/app
     ports:
       - "8000:8000"
-    environment:
-      - DEBUG=1
-      - DB_HOST=db
-      - DB_NAME=${DB_NAME:-loc10}
-      - DB_USER=${DB_USER:-postgres}
-      - DB_PASSWORD=${DB_PASSWORD:-postgres}
-      - DB_PORT=5432
-      - REDIS_URL=redis://redis:6379/0
-      - ALLOWED_HOSTS=localhost,127.0.0.1,backend
+    env_file: # <-- NOVO: Passa as variáveis do .env
+      - ./apps/api/.env
     depends_on:
       db:
         condition: service_healthy
@@ -52,16 +47,17 @@ services:
     build:
       context: ./apps/web
       dockerfile: Dockerfile
-    volumes:
-      - ./apps/web:/app
-      - /app/node_modules
     ports:
       - "3000:3000"
     environment:
+      # Adicionamos o comando de desenvolvimento diretamente aqui
+      # Isso evita o problema do server.js e permite hot-reload
       - NODE_ENV=development
-      - WATCHPACK_POLLING=true
+    command: node server.js
+    env_file:
+      - ./apps/web/.env.local # Cria este arquivo depois se precisar
     depends_on:
-      - backend
+      - api
 
 volumes:
   postgres_data:

@@ -1,38 +1,30 @@
-# /apps/api/Dockerfile
-FROM python:3.11-slim-bookworm
+# apps/api/Dockerfile
 
-WORKDIR /app
+# Usamos a imagem oficial Python (Slim é menor)
+FROM python:3.11-slim
 
-# Set environment variables
-ENV PYTHONDONTWRITEBYTECODE=1 \
-  PYTHONUNBUFFERED=1 \
-  POETRY_VERSION=1.7.1
+# Define variáveis de ambiente
+ENV PYTHONUNBUFFERED 1
+ENV DJANGO_SETTINGS_MODULE=config.settings
 
-# Install system dependencies
+# Define o diretório de trabalho no container
+WORKDIR /usr/src/app
+
+# Copia os arquivos de dependência primeiro para aproveitar o cache
+COPY requirements.txt .
+
+# Instala as dependências (incluindo dependências de sistema para o psycopg2)
 RUN apt-get update && apt-get install -y --no-install-recommends \
+  postgresql-client \
+  gcc \
+  # Adicionado netcat e build-essential que estavam no seu
   build-essential \
-  libpq-dev \
-  curl \
   netcat-traditional \
+  && pip install --no-cache-dir -r requirements.txt \
   && rm -rf /var/lib/apt/lists/*
 
-# Install Poetry
-RUN curl -sSL https://install.python-poetry.org | python3 -
-ENV PATH="/root/.local/bin:$PATH"
+# Copia o resto do código
+COPY . .
 
-# Copy dependency files
-COPY pyproject.toml poetry.lock* /app/
-
-# Install dependencies (no-dev for prod, but we use dev for this env)
-RUN poetry config virtualenvs.create false \
-  && poetry install --no-interaction --no-ansi --no-root
-
-# Copy project
-COPY . /app/
-
-# Entrypoint script (to be created)
-COPY ./entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
-ENTRYPOINT ["/entrypoint.sh"]
-
+# Comando de inicialização
 CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]

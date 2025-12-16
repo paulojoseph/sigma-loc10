@@ -1,7 +1,14 @@
-import type { NextConfig } from "next";
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  // ... outras configurações
 
-const nextConfig: NextConfig = {
-  /* config options here */
+  // ATIVAR MODO STANDALONE PARA Otimizar o Docker Build
+  output: 'standalone',
+
+  // Requerido quando usando pastas de apps
+  experimental: {
+    appDir: true,
+  },
 };
 
-export default nextConfig;
+module.exports = nextConfig;
