@@ -10,7 +10,7 @@ services:
     ports:
       - "5432:5432"
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
       interval: 5s
       timeout: 5s
       retries: 5
@@ -22,20 +22,19 @@ services:
     volumes:
       - redis_data:/data
 
-
-  api: # <-- Renomeado de 'backend' para 'api'
-    build: 
+  api:
+    build:
       context: ./apps/api
       dockerfile: Dockerfile
     command: >
       sh -c "python manage.py makemigrations accounts &&
              python manage.py migrate --no-input &&
-             python manage.py runserver 0.0.0.0:8000" # <-- Comando de migração adicionado
+             python manage.py runserver 0.0.0.0:8000"
     volumes:
-      - ./apps/api:/usr/src/app # <-- Mudar de /app para /usr/src/app
+      - ./apps/api:/usr/src/app
     ports:
       - "8000:8000"
-    env_file: # <-- NOVO: Passa as variáveis do .env
+    env_file:
       - ./apps/api/.env
     depends_on:
       db:
@@ -47,15 +46,22 @@ services:
     build:
       context: ./apps/web
       dockerfile: Dockerfile
+    container_name: sigma-loc10-frontend
+    restart: always
     ports:
       - "3000:3000"
+    # --- MUDANÇAS CRÍTICAS AQUI ---
+    volumes:
+      - ./apps/web:/app # Espelha sua pasta do Windows para o Linux
+      - /app/node_modules # Isola as dependências do container (não mistura com Windows)
+      - /app/.next # Isola o cache de build para performance
     environment:
-      # Adicionamos o comando de desenvolvimento diretamente aqui
-      # Isso evita o problema do server.js e permite hot-reload
       - NODE_ENV=development
-    command: node server.js
+      - WATCHPACK_POLLING=true # OBRIGATÓRIO para Docker no Windows atualizar arquivos
+    command: sh -c "npm install && npm run dev"
+    # ------------------------------
     env_file:
-      - ./apps/web/.env.local # Cria este arquivo depois se precisar
+      - ./apps/web/.env.local
     depends_on:
       - api
 

@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react';
+import Link from 'next/link';
 
 // Tipagem para TypeScript (Senioridade: Type Safety)
 interface Equipment {
@@ -82,9 +83,12 @@ export default function EquipmentList() {
 
             {/* Botão de Ação Fake */}
             <div className="bg-gray-50 px-5 py-3 border-t border-gray-100 text-right">
-              <button className="text-sm font-medium text-blue-600 hover:text-blue-800 transition-colors">
+              <Link
+                href={`/equipment/${item.id}`}
+                className="text-sm font-medium text-blue-600 hover:text-blue-800 transition-colors inline-block"
+              >
                 Ver Detalhes →
-              </button>
+              </Link>
             </div>
           </div>
         ))}
