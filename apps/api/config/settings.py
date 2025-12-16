@@ -119,11 +119,15 @@ AUTH_USER_MODEL = 'accounts.CustomUser'
 # --- DRF Configuration ---
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.IsAuthenticated', # Segurança por padrão: tudo é fechado
+        'rest_framework.permissions.IsAuthenticated',
     ],
     'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework.authentication.SessionAuthentication', # Útil para o Admin navegável
-        # Futuramente adicionaremos JWT aqui
+        # O JWT entra como principal método de autenticação
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+        
+        # Mantemos SessionAuthentication para você continuar usando a 
+        # interface web do Django Admin sem problemas.
+        'rest_framework.authentication.SessionAuthentication',
     ],
 }
 
@@ -134,3 +138,14 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
     "http://127.0.0.1:3000",
 ]
+
+from datetime import timedelta
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
+    'ROTATE_REFRESH_TOKENS': False,
+    'BLACKLIST_AFTER_ROTATION': False,
+    'SIGNING_KEY': SECRET_KEY, # Usa a mesma chave do seu .env
+    'AUTH_HEADER_TYPES': ('Bearer',),
+}
