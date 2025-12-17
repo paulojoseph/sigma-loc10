@@ -67,16 +67,34 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'config.wsgi.application'
 
-# --- DATABASE CONFIGURATION (BLINDADO) ---
-# Se rodar no Railway, ele injeta DATABASE_URL automaticamente.
-# Se rodar no Docker local, ele pega do .env.
-DATABASES = {
-    'default': dj_database_url.config(
-        default=config('DATABASE_URL', default='sqlite:///' + str(BASE_DIR / 'db.sqlite3')),
-        conn_max_age=600,
-        conn_health_checks=True,
-    )
-}
+# --- DATABASE CONFIGURATION (Blindado) ---
+
+# Tenta pegar a URL do Railway diretamente do ambiente
+RAILWAY_DB_URL = os.getenv('DATABASE_URL')
+
+if RAILWAY_DB_URL:
+    # 🚂 PRODUÇÃO (Railway)
+    # Se existe URL do Railway, USAMOS ELA e ignoramos o resto.
+    DATABASES = {
+        'default': dj_database_url.parse(
+            RAILWAY_DB_URL,
+            conn_max_age=600,
+            conn_health_checks=True,
+        )
+    }
+else:
+    # 🐳 LOCAL (Docker)
+    # Se não tem URL do Railway, assume que é Docker local (host='db')
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': config('DB_NAME', default='loc10'),
+            'USER': config('DB_USER', default='postgres'),
+            'PASSWORD': config('DB_PASSWORD', default='postgres'),
+            'HOST': config('DB_HOST', default='db'), # <--- O culpado 'db' só vive aqui agora
+            'PORT': config('DB_PORT', default='5432'),
+        }
+    }
 
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [
