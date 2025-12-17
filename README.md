@@ -4,7 +4,8 @@
 
 <div align="center">
 
-[![Live Demo](https://img.shields.io/badge/demo-Acesse%20Agora-E91E63?style=for-the-badge&logo=vercel)](https://sigma-loc-demo.vercel.app)
+[![Live Demo](https://img.shields.io/badge/LIVE%20DEMO-Acesse%20Aqui-E91E63?style=for-the-badge&logo=vercel)](SEU_LINK_VERCEL)
+[![API Docs](https://img.shields.io/badge/API%20REST-Documentação-2E7D32?style=for-the-badge&logo=django)](SEU_LINK_RAILWAY/api/)
 ![Status](https://img.shields.io/badge/status-MVP%20Complete-success?style=for-the-badge)
 ![CI/CD](https://img.shields.io/badge/CI-GitHub%20Actions-blue?style=for-the-badge)
 ![Docker](https://img.shields.io/badge/container-Docker%20Compose-2496ED?style=for-the-badge)

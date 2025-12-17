@@ -4,7 +4,7 @@ psycopg2-binary
 python-decouple
 pytest-django
 factory_boy
-dj-database-url # <-- NOVO
+dj-database-url>=2.1.0
 djangorestframework-simplejwt # <-- NOVO
 django-cors-headers
 gunicorn==21.2.0

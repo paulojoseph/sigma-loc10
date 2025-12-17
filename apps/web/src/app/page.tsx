@@ -11,6 +11,9 @@ export default function Home() {
     queryFn: EquipmentService.getAll,
   });
 
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api';
+  const adminUrl = apiUrl.replace(/\/api\/?$/, '') + '/admin';
+
   const totalAssets = equipment.length;
   const availableAssets = equipment.filter((e: Equipment) => e.status === 'AVAILABLE').length;
   const maintenanceAssets = equipment.filter((e: Equipment) => e.status === 'MAINTENANCE').length;
@@ -27,7 +30,7 @@ export default function Home() {
           </div>
           <div className="flex gap-3">
             <Link
-              href="http://localhost:8000/admin"
+              href={adminUrl}
               target="_blank"
               className="px-4 py-2 bg-slate-900 text-white rounded-lg text-sm font-medium hover:bg-slate-800 transition-colors shadow-lg shadow-slate-200"
             >
