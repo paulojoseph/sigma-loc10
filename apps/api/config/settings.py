@@ -79,7 +79,7 @@ if RAILWAY_DB_URL:
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
     
     # FORÇA BRUTA: Aceita qualquer host no Railway para evitar erro 400/502
-    ALLOWED_HOSTS = ['*']
+    ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='*', cast=Csv())
     
     DATABASES = {
         'default': dj_database_url.parse(

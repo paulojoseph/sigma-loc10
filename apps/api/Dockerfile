@@ -1,19 +1,13 @@
-# apps/api/Dockerfile
-
-# Usamos a imagem oficial Python (Slim é menor)
 FROM python:3.11-slim
 
-# Define variáveis de ambiente
-ENV PYTHONUNBUFFERED 1
+ENV PYTHONUNBUFFERED=1
 ENV DJANGO_SETTINGS_MODULE=config.settings
 
-# Define o diretório de trabalho no container
 WORKDIR /usr/src/app
 
-# Copia os arquivos de dependência primeiro para aproveitar o cache
-COPY requirements.txt .
+# Copia SOMENTE o requirements.txt da pasta api
+COPY ./requirements.txt .
 
-# Instala as dependências (incluindo dependências de sistema para o psycopg2)
 RUN apt-get update && apt-get install -y --no-install-recommends \
   postgresql-client \
   gcc \
@@ -23,15 +17,10 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   && pip install gunicorn \
   && rm -rf /var/lib/apt/lists/*
 
-# Copia o resto do código
+# Copia o resto do código da API
 COPY . .
 
-# Copia o resto do código
-COPY . .
+# Dá permissão ao entrypoint
+RUN chmod +x entrypoint.sh
 
-ENV PYTHONUNBUFFERED=1
-
-# O comando será controlado pelo docker-compose.yml para transparência
-# Mas definimos um padrão inteligente para Produção (Railway) caso o override não ocorra
-# DIAGNÓSTICO: Usando runserver para eliminar problemas de socket do Gunicorn
-CMD sh -c "python manage.py migrate && python manage.py loaddata fixtures/initial_data.json && python manage.py collectstatic --noinput && python manage.py runserver 0.0.0.0:${PORT:-8000} --noreload"
+CMD ["./entrypoint.sh"]

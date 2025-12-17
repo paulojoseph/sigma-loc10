@@ -27,28 +27,30 @@ services:
       - redis_data:/data
 
   # --- Backend (Django) ---
-  api:
-    build:
-      context: ./apps/api
-      dockerfile: Dockerfile
-    command: >
-      sh -c "python manage.py migrate --no-input &&
-             python manage.py loaddata /usr/src/app/fixtures/initial_data.json &&
-             python -c \"import os, django; os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings'); django.setup(); from django.contrib.auth import get_user_model; User = get_user_model(); User.objects.filter(username='admin').exists() or User.objects.create_superuser('admin', 'admin@example.com', 'admin123')\" &&
-             python manage.py runserver 0.0.0.0:8000"
-    volumes:
-      - ./apps/api:/usr/src/app
-    ports:
-      - "8000:8000"
-    env_file:
-      - .env
-    environment:
-      - POSTGRES_HOST=db
-    depends_on:
-      db:
-        condition: service_healthy
-      redis:
-        condition: service_started
+  # trecho (api service)
+api:
+  build:
+    context: ./apps/api
+    dockerfile: Dockerfile
+  command: >
+    sh -c "python manage.py migrate --no-input &&
+           python manage.py loaddata /usr/src/app/fixtures/initial_data.json || true &&
+           python -c \"import os, django; os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings'); django.setup(); from django.contrib.auth import get_user_model; User = get_user_model(); User.objects.filter(username='admin').exists() or User.objects.create_superuser('admin', 'admin@example.com', 'admin123')\" &&
+           python manage.py runserver 0.0.0.0:8000 --noreload"
+  volumes:
+    - ./apps/api:/usr/src/app
+  ports:
+    - "8000:8000"
+  env_file:
+    - .env
+  environment:
+    - POSTGRES_HOST=db
+  depends_on:
+    db:
+      condition: service_healthy
+    redis:
+      condition: service_started
+
 
   # --- Frontend (Next.js) ---
   frontend:
