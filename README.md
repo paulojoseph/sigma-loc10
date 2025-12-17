@@ -110,14 +110,16 @@ Escolhido pela segurança padrão ("batteries-included") e velocidade de impleme
 - **Serializers:** Validação estrita de entrada (Sanitization) para garantir que nenhum dado sujo entre no banco.
 
 ## 🚀 Instalação e Execução (Zero-Config)
-O ambiente é 100% Dockerizado para garantir reprodutibilidade.
+O ambiente é 100% Dockerizado para garantir reprodutibilidade. É necessário ter o [Docker Desktop](https://www.docker.com/products/docker-desktop/) instalado.
 
 ### 1. Clone e Suba (Zero-Touch)
 
 ```bash
-```bash
 git clone https://github.com/paulojoseph/sigma-loc10.git
 cd sigma-loc10
+
+# Configure o ambiente
+cp .env.example .env
 
 # Sobe todo o ecossistema
 # O script de entrypoint fará automaticamente:
@@ -125,7 +127,6 @@ cd sigma-loc10
 # 2. Rodar Migrations
 # 3. Carregar dados de teste (Seed)
 # 4. Criar superusuário (admin/admin123)
-cp .env.example .env
 docker compose up --build
 ```
 

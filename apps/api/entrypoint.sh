@@ -14,9 +14,8 @@ echo "Aplicando migrações..."
 python manage.py migrate --noinput
 
 # Carrega dados iniciais se a tabela de equipamentos estiver vazia
-# Verifica se existe algum equipamento. Se retornar 0, carrega a fixture.
-count=$(python manage.py shell -c "from equipment.models import Equipment; print(Equipment.objects.count())" || echo "0")
-if [ "$count" = "0" ]; then
+# Verifica se existe algum equipamento. Retorna codigo 0 se vazio, 1 se tiver dados.
+if python manage.py shell -c "import sys; from equipment.models import Equipment; sys.exit(0 if Equipment.objects.count() == 0 else 1)"; then
     echo "Carregando dados iniciais..."
     # Usa o caminho absoluto para evitar ambiguidade
     python manage.py loaddata /usr/src/app/fixtures/initial_data.json
