@@ -4,6 +4,7 @@
 
 <div align="center">
 
+[![Live Demo](https://img.shields.io/badge/demo-Acesse%20Agora-E91E63?style=for-the-badge&logo=vercel)](https://sigma-loc-demo.vercel.app)
 ![Status](https://img.shields.io/badge/status-MVP%20Complete-success?style=for-the-badge)
 ![CI/CD](https://img.shields.io/badge/CI-GitHub%20Actions-blue?style=for-the-badge)
 ![Docker](https://img.shields.io/badge/container-Docker%20Compose-2496ED?style=for-the-badge)
@@ -93,24 +94,32 @@ sequenceDiagram
     end
 ```
 
+---
+
 ## 🛠️ Stack Tecnológico
 
 ### Frontend | Next.js 14 + React Query
 A escolha do stack foi pragmática, focada em resolver dores reais de performance:
-
 - **TanStack Query (v5):** Elimina a necessidade de useEffect manuais e garante cache inteligente.
 - **Service Layer Desacoplada:** Isolamento total da lógica de API em `src/services`, garantindo tipos estritos (TypeScript).
 - **Design System:** TailwindCSS + Lucide Icons para interface limpa, acessível e consistente.
 
 ### Backend | Django REST Framework
 Escolhido pela segurança padrão ("batteries-included") e velocidade de implementação:
-
 - **Arquitetura Modular:** Separação clara de contextos (`core`, `accounts`, `equipment`) facilitando futura extração para microsserviços.
 - **Django Admin:** Utilizado como Backoffice administrativo, economizando centenas de horas de desenvolvimento.
 - **Serializers:** Validação estrita de entrada (Sanitization) para garantir que nenhum dado sujo entre no banco.
 
+---
+
 ## 🚀 Instalação e Execução (Zero-Config)
-O ambiente é 100% Dockerizado para garantir reprodutibilidade. É necessário ter o [Docker Desktop](https://www.docker.com/products/docker-desktop/) instalado.
+
+O ambiente é 100% Dockerizado para garantir que o projeto rode na sua máquina exatamente como roda na minha.
+
+### 📋 Pré-requisitos Obrigatórios
+Para executar este projeto localmente, é mandatório ter instalado:
+- [Docker Desktop (Windows/Mac/Linux)](https://www.docker.com/products/docker-desktop/) - Essencial para orquestrar os containers.
+- Git
 
 ### 1. Clone e Suba (Zero-Touch)
 
@@ -119,6 +128,8 @@ git clone https://github.com/paulojoseph/sigma-loc10.git
 cd sigma-loc10
 
 # Configure o ambiente
+# Windows: copy .env.example .env
+# Mac/Linux: cp .env.example .env
 cp .env.example .env
 
 # Sobe todo o ecossistema
@@ -130,14 +141,20 @@ cp .env.example .env
 docker compose up --build
 ```
 
-Aguarde até ver a mensagem **"Ready in Xms"** no terminal.
-O sistema estará disponível em:
+**Aguarde até ver a mensagem "Ready in Xms" no terminal.**
+
+---
+
+## 🔗 Portas de Acesso
+
 - **Frontend:** http://localhost:3000
-- **Admin/Backoffice:** http://localhost:8000/admin (Login: `admin` / Senha: `admin123`)
+- **Backoffice (Django Admin):** http://localhost:8000/admin (Login: `admin` / Senha: `admin123`)
+
+---
 
 ## 🧪 Qualidade e CI/CD
-Qualidade não é opcional. O projeto conta com pipeline no GitHub Actions validando cada commit:
 
+Qualidade não é opcional. O projeto conta com pipeline no GitHub Actions validando cada commit:
 - **Frontend Check:** Linting (ESLint) e verificação de Build.
 - **Backend Check:** Testes de integração (Pytest) rodando contra banco PostgreSQL efêmero.
 
@@ -148,25 +165,24 @@ Para rodar localmente:
 docker compose exec api pytest
 
 # Lint do Frontend
-docker compose exec web npm run lint
+docker compose exec frontend npm run lint
 ```
 
 ---
 
 ## 📚 Documentação Estendida (Deep Dive)
 
-Para não poluir o README principal, detalhei as decisões de engenharia na pasta [`.docs/`](./.docs). Recomendo a leitura para entender a profundidade do projeto:
+Para não poluir o README principal, detalhei as decisões de engenharia na pasta `.docs/`. Recomendo a leitura para entender a profundidade do projeto:
 
 | Arquivo | Descrição |
-| :--- | :--- |
-| [**00_contexto_produto.md**](./.docs/00_contexto_produto.md) | 🧠 **Visão de Negócio:** O problema real que o software resolve e a filosofia *Risk-Driven*. |
-| [**01_stack_regras.md**](./.docs/01_stack_regras.md) | 👮 **Linter Humano:** Regras estritas de código, *Anti-patterns* proibidos e guia de estilo para IA. |
-| [**02_arquitetura.md**](./.docs/02_arquitetura.md) | 📐 **Diagramas:** Detalhamento do fluxo de dados, camadas de serviço e decisões de *Clean Arch*. |
-| [**03_matriz_risco.md**](./.docs/03_matriz_risco.md) | 🛡️ **Análise de Risco:** Tabela completa de riscos de negócio (Overbooking, Latência) e suas mitigações técnicas. |
+|---------|-----------|
+| `00_contexto_produto.md` | 🧠 **Visão de Negócio:** O problema real que o software resolve e a filosofia Risk-Driven. |
+| `01_stack_regras.md` | 👮 **Linter Humano:** Regras estritas de código, Anti-patterns proibidos e guia de estilo para IA. |
+| `02_arquitetura.md` | 📐 **Diagramas:** Detalhamento do fluxo de dados, camadas de serviço e decisões de Clean Arch. |
+| `03_matriz_risco.md` | 🛡️ **Análise de Risco:** Tabela completa de riscos de negócio (Overbooking, Latência) e suas mitigações técnicas. |
 
 ## 🗺️ Roadmap (V2.0)
 Melhorias mapeadas para a próxima sprint:
-
 - [ ] **Segurança:** Implementar autenticação via JWT com rotação de chaves.
 - [ ] **Concorrência:** Adicionar `select_for_update` no Postgres para travar linhas em cenários de alta concorrência.
 - [ ] **Infra:** Deploy automatizado na Vercel (Front) e Railway (Back).
