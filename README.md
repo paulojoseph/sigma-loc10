@@ -124,6 +124,7 @@ cd sigma-loc10
 # 2. Rodar Migrations
 # 3. Carregar dados de teste (Seed)
 # 4. Criar superusuário (admin/admin123)
+cp .env.example .env
 docker compose up --build
 ```
 
