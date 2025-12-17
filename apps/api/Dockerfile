@@ -31,4 +31,4 @@ COPY . .
 
 # O comando será controlado pelo docker-compose.yml para transparência
 # Mas definimos um padrão inteligente para Produção (Railway) caso o override não ocorra
-CMD sh -c "python manage.py migrate && python manage.py loaddata fixtures/initial_data.json && python manage.py collectstatic --noinput && gunicorn config.wsgi:application --bind 0.0.0.0:${PORT:-8000}"
+CMD sh -c "python manage.py migrate && python manage.py loaddata fixtures/initial_data.json && python manage.py collectstatic --noinput && gunicorn config.wsgi:application --bind 0.0.0.0:${PORT:-8000} --workers 4 --log-level debug"

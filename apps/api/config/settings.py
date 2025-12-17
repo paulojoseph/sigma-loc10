@@ -75,11 +75,14 @@ RAILWAY_DB_URL = os.getenv('DATABASE_URL')
 if RAILWAY_DB_URL:
     # 🚂 PRODUÇÃO (Railway)
     # Se existe URL do Railway, USAMOS ELA e ignoramos o resto.
+    # Adicionamos suporte a Proxy SSL (Essencial para o Railway)
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+    
     DATABASES = {
         'default': dj_database_url.parse(
             RAILWAY_DB_URL,
             conn_max_age=600,
-            conn_health_checks=True,
+            # Removed health checks to be safer with older drivers
         )
     }
 else:
