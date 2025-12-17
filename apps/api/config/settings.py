@@ -211,3 +211,15 @@ LOGGING = {
         },
     },
 }
+
+# --- CACHE LOCAL (Diagnóstico para Eliminar Redis) ---
+# Usamos memória local para garantir que o site suba mesmo sem Redis
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'LOCATION': 'unique-snowflake',
+    }
+}
+
+# Voltar sessão para o banco (mais seguro por enquanto)
+SESSION_ENGINE = "django.contrib.sessions.backends.db"
