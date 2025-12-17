@@ -6,4 +6,5 @@ pytest-django
 factory_boy
 dj-database-url # <-- NOVO
 djangorestframework-simplejwt # <-- NOVO
-django-cors-headers  # <-- O NOME CORRETO NA PyPI
+django-cors-headers
+whitenoise

@@ -115,7 +115,8 @@ O ambiente é 100% Dockerizado para garantir reprodutibilidade.
 ### 1. Clone e Suba (Zero-Touch)
 
 ```bash
-git clone https://github.com/SEU_USUARIO/sigma-loc10.git
+```bash
+git clone https://github.com/paulojoseph/sigma-loc10.git
 cd sigma-loc10
 
 # Sobe todo o ecossistema
