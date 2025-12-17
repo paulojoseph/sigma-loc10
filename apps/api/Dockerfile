@@ -33,4 +33,5 @@ ENV PYTHONUNBUFFERED=1
 
 # O comando será controlado pelo docker-compose.yml para transparência
 # Mas definimos um padrão inteligente para Produção (Railway) caso o override não ocorra
-CMD sh -c "python manage.py migrate && python manage.py loaddata fixtures/initial_data.json && python manage.py collectstatic --noinput && gunicorn config.wsgi:application --bind 0.0.0.0:${PORT:-8000} --workers 2 --log-level debug --access-logfile - --error-logfile - --forwarded-allow-ips '*'"
+# DIAGNÓSTICO: Usando runserver para eliminar problemas de socket do Gunicorn
+CMD sh -c "python manage.py migrate && python manage.py loaddata fixtures/initial_data.json && python manage.py collectstatic --noinput && python manage.py runserver 0.0.0.0:${PORT:-8000} --noreload"
