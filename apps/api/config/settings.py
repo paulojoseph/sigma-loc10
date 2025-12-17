@@ -17,6 +17,8 @@ ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='127.0.0.1,localhost', cast=Csv(
 
 # Application definition
 INSTALLED_APPS = [
+    'corsheaders',        
+    'rest_framework',      
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -25,8 +27,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     
     # Third party
-    'rest_framework',      
-    'corsheaders',        
 
     # Local
     'accounts',
@@ -36,11 +36,11 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',      # CORS deve ser logo no início
+    'django.middleware.common.CommonMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware', # WhiteNoise para estáticos
-    'corsheaders.middleware.CorsMiddleware',      # CORS deve ser logo no início
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
@@ -150,7 +150,13 @@ REST_FRAMEWORK = {
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
     "http://127.0.0.1:3000",
+    "https://sigma-loc10.vercel.app",
+    "https://sigma-loc10-8xy23got3-paulojosephs-projects.vercel.app",
 ]
+
+CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOW_CREDENTIALS = True
+
 
 CSRF_TRUSTED_ORIGINS = [
     "http://localhost:3000",
