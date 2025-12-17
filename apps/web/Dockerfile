@@ -1,19 +1,42 @@
 # apps/web/Dockerfile
-# 1. Build Stage
-FROM node:20-alpine AS builder
+# 1. Base Image
+FROM node:20-slim AS base
+ENV PNPM_HOME="/pnpm"
+ENV PATH="$PNPM_HOME:$PATH"
 WORKDIR /app
+
+# 2. Dependencies Stage
+FROM base AS deps
 COPY package.json package-lock.json ./
-RUN npm install
+# Use npm ci for deterministic installs instructions
+RUN npm ci
+
+# 3. Development Stage
+FROM base AS dev
+WORKDIR /app
+COPY --from=deps /app/node_modules ./node_modules
 COPY . .
-# Adicionamos 'npm run build' que é a fase que gera os arquivos finais
+# Default command for dev
+CMD ["npm", "run", "dev"]
+
+# 4. Build Stage
+FROM base AS builder
+WORKDIR /app
+COPY --from=deps /app/node_modules ./node_modules
+COPY . .
 RUN npm run build
 
-# 2. Production Stage (Runtime)
-FROM node:20-alpine AS runner
+# 5. Production Stage (Runtime)
+FROM base AS runner
 WORKDIR /app
+ENV NODE_ENV production
 ENV PORT 3000
+
+# Copy public assets
 COPY --from=builder /app/public ./public
+
+# Automatically leverage output traces to reduce image size
 COPY --from=builder /app/.next/standalone ./
 COPY --from=builder /app/.next/static ./.next/static
-# Inicia o servidor Next.js
-CMD ["node", "./server.js"]
+
+CMD ["node", "server.js"]

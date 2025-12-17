@@ -50,7 +50,7 @@ export default function Home() {
           {isLoading ? (
             <div className="p-10 text-center text-slate-400">Carregando indicadores...</div>
           ) : (
-            <EquipmentList equipment={equipment} />
+            <EquipmentList />
           )}
         </div>
       </div>
