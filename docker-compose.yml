@@ -40,6 +40,8 @@ services:
       - "8000:8000"
     env_file:
       - .env  # CORREÇÃO: Removido o caminho apps/api/.env
+    environment:
+      - POSTGRES_HOST=db
     depends_on:
       db:
         condition: service_healthy

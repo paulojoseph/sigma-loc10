@@ -112,32 +112,25 @@ Escolhido pela segurança padrão ("batteries-included") e velocidade de impleme
 ## 🚀 Instalação e Execução (Zero-Config)
 O ambiente é 100% Dockerizado para garantir reprodutibilidade.
 
-### 1. Clone e Suba
+### 1. Clone e Suba (Zero-Touch)
 
 ```bash
 git clone https://github.com/SEU_USUARIO/sigma-loc10.git
 cd sigma-loc10
 
-# Sobe todo o ecossistema (Front, Back e Banco)
+# Sobe todo o ecossistema
+# O script de entrypoint fará automaticamente:
+# 1. Aguardar o Banco
+# 2. Rodar Migrations
+# 3. Carregar dados de teste (Seed)
+# 4. Criar superusuário (admin/admin123)
 docker compose up --build
 ```
-Aguarde o build. O sistema estará disponível em:
+
+Aguarde até ver a mensagem **"Ready in Xms"** no terminal.
+O sistema estará disponível em:
 - **Frontend:** http://localhost:3000
-- **API:** http://localhost:8000/api/
-
-### 2. Carga de Dados (Seed)
-Para ver o dashboard preenchido com equipamentos de teste:
-
-```bash
-docker compose exec api python manage.py loaddata initial_data.json
-```
-
-### 3. Acesso Administrativo
-Para acessar o painel `/admin`, crie um superusuário:
-
-```bash
-docker compose exec api python manage.py createsuperuser
-```
+- **Admin/Backoffice:** http://localhost:8000/admin (Login: `admin` / Senha: `admin123`)
 
 ## 🧪 Qualidade e CI/CD
 Qualidade não é opcional. O projeto conta com pipeline no GitHub Actions validando cada commit:

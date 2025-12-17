@@ -18,7 +18,7 @@ export default function Navbar() {
 
         {/* Links de Navegação */}
         <div className="hidden md:flex items-center gap-8 text-sm font-medium text-slate-500">
-          <Link href="/" className="hover:text-blue-600 transition-colors">Dashboard</Link>
+          <Link href="/" className="text-blue-600 font-semibold">Dashboard</Link>
           <Link href="#" className="hover:text-blue-600 transition-colors">Equipamentos</Link>
           <Link href="#" className="hover:text-blue-600 transition-colors">Contratos</Link>
           <Link href="#" className="hover:text-blue-600 transition-colors">Relatórios</Link>

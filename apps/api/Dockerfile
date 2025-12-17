@@ -17,14 +17,18 @@ COPY requirements.txt .
 RUN apt-get update && apt-get install -y --no-install-recommends \
   postgresql-client \
   gcc \
-  # Adicionado netcat e build-essential que estavam no seu
   build-essential \
   netcat-traditional \
   && pip install --no-cache-dir -r requirements.txt \
+  && pip install gunicorn \
   && rm -rf /var/lib/apt/lists/*
 
 # Copia o resto do código
 COPY . .
 
-# Comando de inicialização
-CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+# Copia e configura o entrypoint
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
+# Define o entrypoint
+ENTRYPOINT ["/entrypoint.sh"]

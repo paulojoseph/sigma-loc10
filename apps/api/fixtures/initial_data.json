@@ -4,7 +4,7 @@
   "pk": "114c5f98-2bd0-428c-bee7-cd7f15afce33",
   "fields": {
     "name": "Martelo Demolidor 15kg",
-    "description": "Sistema antivibra├º├úo, 1700W. Ideal para quebra de pisos e vigas.",
+    "description": "Sistema antivibração, 1700W. Ideal para quebra de pisos e vigas.",
     "daily_rate": "120.00",
     "status": "AVAILABLE",
     "created_at": "2025-12-16T13:49:20.915Z",
@@ -16,7 +16,7 @@
   "pk": "18355e02-16f9-44df-99a3-f56118c299d8",
   "fields": {
     "name": "Serra Circular de Bancada",
-    "description": "Disco de 10 polegadas, corte preciso em madeira. Guia de alum├¡nio.",
+    "description": "Disco de 10 polegadas, corte preciso em madeira. Guia de alumínio.",
     "daily_rate": "80.00",
     "status": "AVAILABLE",
     "created_at": "2025-12-16T13:49:20.945Z",
@@ -28,7 +28,7 @@
   "pk": "1f2a4265-62ad-44f0-b818-67a61f0db90f",
   "fields": {
     "name": "Escada Extensiva 7m",
-    "description": "Fibra de vidro, n├úo condutora. Essencial para servi├ºos el├®tricos.",
+    "description": "Fibra de vidro, não condutora. Essencial para serviços elétricos.",
     "daily_rate": "28.00",
     "status": "RENTED",
     "created_at": "2025-12-16T13:49:20.950Z",
@@ -64,7 +64,7 @@
   "pk": "54289a89-3a41-421d-a2d9-c7ed209e841c",
   "fields": {
     "name": "Compactador de Solo (Sapo)",
-    "description": "Motor 4 tempos a gasolina. Alta compacta├º├úo para funda├º├Áes.",
+    "description": "Motor 4 tempos a gasolina. Alta compactação para fundações.",
     "daily_rate": "150.00",
     "status": "AVAILABLE",
     "created_at": "2025-12-16T13:49:20.921Z",
@@ -76,7 +76,7 @@
   "pk": "61ef91dc-60c9-4d70-b400-2eb5e0685729",
   "fields": {
     "name": "Guincho de Coluna 200kg",
-    "description": "Eleva├º├úo de materiais para lajes e andares superiores. Cabo de 30m.",
+    "description": "Elevação de materiais para lajes e andares superiores. Cabo de 30m.",
     "daily_rate": "65.00",
     "status": "RENTED",
     "created_at": "2025-12-16T13:49:20.955Z",
@@ -88,7 +88,7 @@
   "pk": "868f6e3e-3a22-424e-9b84-0ab2f396a02f",
   "fields": {
     "name": "Furadeira de Impacto Industrial",
-    "description": "Mandril 1/2, velocidade vari├ível e revers├¡vel. Acompanha maleta.",
+    "description": "Mandril 1/2, velocidade variável e reversível. Acompanha maleta.",
     "daily_rate": "25.00",
     "status": "AVAILABLE",
     "created_at": "2025-12-16T13:49:20.930Z",
@@ -100,7 +100,7 @@
   "pk": "8ca23f1b-719d-4523-99af-788fa909a0cd",
   "fields": {
     "name": "Andaime Tubular 1.5m (Par)",
-    "description": "A├ºo carbono refor├ºado, encaixe perfeito. Pre├ºo por metro vertical.",
+    "description": "Aço carbono reforçado, encaixe perfeito. Preço por metro vertical.",
     "daily_rate": "12.00",
     "status": "RENTED",
     "created_at": "2025-12-16T13:49:20.909Z",
@@ -111,7 +111,7 @@
   "model": "equipment.equipment",
   "pk": "acd01e24-8ba7-4aa0-add2-59607c6f7959",
   "fields": {
-    "name": "Lavadora de Alta Press├úo",
+    "name": "Lavadora de Alta Pressão",
     "description": "Uso profissional, 2000 PSI, mangueira de 10 metros.",
     "daily_rate": "55.00",
     "status": "RENTED",
@@ -124,7 +124,7 @@
   "pk": "beb786e3-7aca-4824-8b9a-05cb1d7f6ace",
   "fields": {
     "name": "Betoneira 400L Profissional",
-    "description": "Motor el├®trico monof├ísico, ideal para concreto e argamassa em grandes obras.",
+    "description": "Motor elétrico monofásico, ideal para concreto e argamassa em grandes obras.",
     "daily_rate": "45.00",
     "status": "AVAILABLE",
     "created_at": "2025-12-16T13:49:20.899Z",
@@ -136,7 +136,7 @@
   "pk": "dbbcb6ae-f60d-4af3-94b1-93ac9dac632c",
   "fields": {
     "name": "Esmerilhadeira Angular 7\"",
-    "description": "Rota├º├úo de 8500 RPM. Para corte e desbaste em metais e alvenaria.",
+    "description": "Rotação de 8500 RPM. Para corte e desbaste em metais e alvenaria.",
     "daily_rate": "35.00",
     "status": "AVAILABLE",
     "created_at": "2025-12-16T13:49:20.925Z",
@@ -148,7 +148,7 @@
   "pk": "f412a03c-f2bb-455a-83e7-c1e099cbf878",
   "fields": {
     "name": "Gerador de Energia 5kVA",
-    "description": "Gasolina, partida el├®trica, autonomia de 8h. Tens├úo Bivolt.",
+    "description": "Gasolina, partida elétrica, autonomia de 8h. Tensão Bivolt.",
     "daily_rate": "200.00",
     "status": "MAINTENANCE",
     "created_at": "2025-12-16T13:49:20.935Z",
