@@ -114,14 +114,19 @@ STATIC_URL = 'static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 # Enable WhiteNoise's GZip compression of static assets.
-STORAGES = {
-    "default": {
-        "BACKEND": "django.core.files.storage.FileSystemStorage",
-    },
-    "staticfiles": {
-        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
-    },
-}
+# Enable WhiteNoise's GZip compression of static assets.
+# --- LÓGICA HÍBRIDA (O Pulo do Gato) ---
+if not DEBUG:
+    # PRODUÇÃO (Railway): Usa WhiteNoise com compressão máxima
+    STORAGES = {
+        "staticfiles": {
+            "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+        },
+    }
+else:
+    # LOCAL (Docker/Recrutador): Usa o padrão do Django (sem compressão, sem erro)
+    # Isso evita que o container quebre se não rodar o collectstatic
+    pass
 
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

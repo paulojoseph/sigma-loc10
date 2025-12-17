@@ -7,4 +7,5 @@ factory_boy
 dj-database-url # <-- NOVO
 djangorestframework-simplejwt # <-- NOVO
 django-cors-headers
-whitenoise
+gunicorn==21.2.0
+whitenoise==6.6.0
