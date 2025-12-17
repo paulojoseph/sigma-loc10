@@ -5,8 +5,8 @@ ENV DJANGO_SETTINGS_MODULE=config.settings
 
 WORKDIR /usr/src/app
 
-# Copia SOMENTE o requirements.txt da pasta api
-COPY ./requirements.txt .
+# Copia requirements.txt usando caminho absoluto no contexto
+COPY apps/api/requirements.txt ./requirements.txt
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
   postgresql-client \
@@ -17,10 +17,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   && pip install gunicorn \
   && rm -rf /var/lib/apt/lists/*
 
-# Copia o resto do código da API
-COPY . .
+# Copia todo o código da API
+COPY apps/api/ .
 
-# Dá permissão ao entrypoint
 RUN chmod +x entrypoint.sh
 
 CMD ["./entrypoint.sh"]
