@@ -1,13 +1,13 @@
 # 🚜 Sigma Loc10 | Enterprise Asset Management
 
-> **Technical Showcase:** Aplicação Full Stack desenvolvida com foco em **Arquitetura Resiliente**, **Escalabilidade** e **Experiência do Usuário (UX)**.
-
+> **High-Fidelity PoC:** Uma Prova de Conceito funcional demonstrando **Arquitetura Resiliente**, **Escalabilidade** e **Experiência do Usuário (UX)** em um ciclo curto de desenvolvimento.
 
 <div align="center">
 
 [![Live Demo](https://img.shields.io/badge/DEMO%20ONLINE-Acesse%20Aqui-E91E63?style=for-the-badge&logo=vercel)](https://sigma-loc10.vercel.app/)
+[![Release](https://img.shields.io/github/v/release/paulojoseph/sigma-loc10?style=for-the-badge&label=Versão%20Estável&color=blue)](https://github.com/paulojoseph/sigma-loc10/releases)
 [![Admin Panel](https://img.shields.io/badge/PAINEL%20ADMIN-Backoffice-2E7D32?style=for-the-badge&logo=django)](https://sigma-loc10-production.up.railway.app/admin/)
-![Status](https://img.shields.io/badge/status-MVP%20Finalizado-success?style=for-the-badge)
+![Status](https://img.shields.io/badge/status-PoC%20Finalizado-success?style=for-the-badge)
 ![CI/CD](https://img.shields.io/badge/CI-GitHub%20Actions-blue?style=for-the-badge)
 ![Docker](https://img.shields.io/badge/container-Docker%20Compose-2496ED?style=for-the-badge)
 ![Stack](https://img.shields.io/badge/stack-Next.js%2014%20%7C%20Django%20DRF%20%7C%20Postgres-blue?style=for-the-badge)
@@ -44,9 +44,11 @@ O sistema já vem populado com um superusuário para testes imediatos. **Não ut
 <a id="contexto-produtividade"></a>
 ## 🎯 Contexto & Produtividade
 
-Este projeto é um *Proof of Concept (PoC)* desenvolvido em **menos de 24 horas corridas**.
+Este projeto é um *Proof of Concept (PoC)* de alta fidelidade desenvolvido em **menos de 24 horas corridas**.
 
-O objetivo foi simular um cenário de pressão real para demonstrar como a união de **Experiência de Mercado** com **Fluxos de IA Modernos** permite entregar software enterprise, testado e documentado, em tempo recorde. Não é apenas sobre codificar rápido, mas sobre arquitetar corretamente desde o primeiro minuto.
+O objetivo foi simular um cenário de pressão real ("War Room") para demonstrar como a união de **Experiência de Mercado** com **Fluxos de IA Modernos** permite entregar software enterprise, testado e documentado, em tempo recorde. Não é apenas sobre codificar rápido, mas sobre arquitetar corretamente desde o primeiro minuto.
+
+> ℹ️ **Nota sobre Git History:** Optei deliberadamente por não utilizar *Squash commits* neste repositório. O objetivo é manter a transparência absoluta da linha do tempo de 24h, preservando o registro das decisões de infraestrutura e correções de deploy em tempo real. Em um fluxo de trabalho padrão, utilizaria *Squash & Merge* para manter a branch `main` limpa.
 
 <a id="filosofia-de-engenharia"></a>
 ## 💎 Filosofia de Engenharia
