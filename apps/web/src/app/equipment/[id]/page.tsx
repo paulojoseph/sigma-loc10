@@ -30,7 +30,14 @@ export default function EquipmentDetail({ params }: { params: { id: string } }) 
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ['equipment', params.id] });
       queryClient.invalidateQueries({ queryKey: ['equipment'] });
-      toast.success(`Status atualizado para ${data.status}`);
+
+      const statusMap: Record<string, string> = {
+        'AVAILABLE': 'Disponível',
+        'MAINTENANCE': 'Manutenção',
+        'RENTED': 'Alugado'
+      };
+
+      toast.success(`Status atualizado para ${statusMap[data.status] || data.status}`);
       setIsModalOpen(false);
     },
     onError: () => toast.error("Erro ao atualizar status.")
@@ -44,7 +51,7 @@ export default function EquipmentDetail({ params }: { params: { id: string } }) 
     onSuccess: (_, variables) => {
       queryClient.invalidateQueries({ queryKey: ['equipment', params.id] });
       queryClient.invalidateQueries({ queryKey: ['equipment'] });
-      toast.success(`Alugado para ${variables.clientName}`);
+      toast.success(`Alugado com sucesso para ${variables.clientName}`);
       setIsRentModalOpen(false);
     },
     onError: () => toast.error("Erro ao processar locação.")
@@ -56,6 +63,18 @@ export default function EquipmentDetail({ params }: { params: { id: string } }) 
   const isMaintenance = item.status === 'MAINTENANCE';
   const isRented = item.status === 'RENTED';
   const isAvailable = item.status === 'AVAILABLE';
+
+  // Helper de visualização (Mesma lógica do EquipmentList)
+  const getStatusDisplay = (status: string) => {
+    switch (status) {
+      case 'AVAILABLE': return { label: 'Disponível', color: 'bg-emerald-100 text-emerald-700' };
+      case 'RENTED': return { label: 'Alugado', color: 'bg-blue-100 text-blue-700' };
+      case 'MAINTENANCE': return { label: 'Manutenção', color: 'bg-amber-100 text-amber-700' };
+      default: return { label: status, color: 'bg-slate-100 text-slate-700' };
+    }
+  };
+
+  const statusConfig = getStatusDisplay(item.status);
 
   return (
     <div className="min-h-screen pb-20">
@@ -94,14 +113,11 @@ export default function EquipmentDetail({ params }: { params: { id: string } }) 
           <div className="lg:col-span-2 space-y-8">
             <div>
               <div className="flex items-center gap-3 mb-4">
-                <span className={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider flex items-center gap-2 w-fit
-                   ${isAvailable ? 'bg-emerald-100 text-emerald-700' :
-                    isRented ? 'bg-blue-100 text-blue-700' :
-                      'bg-amber-100 text-amber-700'}`}>
+                <span className={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider flex items-center gap-2 w-fit ${statusConfig.color}`}>
                   {isAvailable && <CheckCircle2 size={12} />}
                   {isRented && <CalendarClock size={12} />}
                   {isMaintenance && <AlertTriangle size={12} />}
-                  {item.status}
+                  {statusConfig.label}
                 </span>
                 <span className="text-slate-400 text-xs font-mono">ID: {item.id}</span>
               </div>

@@ -4,9 +4,9 @@
 
 <div align="center">
 
-[![Live Demo](https://img.shields.io/badge/LIVE%20DEMO-Acesse%20Aqui-E91E63?style=for-the-badge&logo=vercel)](https://sigma-loc10.vercel.app/)
-[![API Docs](https://img.shields.io/badge/API%20REST-Documentação-2E7D32?style=for-the-badge&logo=django)](https://sigma-loc10-production.up.railway.app/admin/)
-![Status](https://img.shields.io/badge/status-MVP%20Complete-success?style=for-the-badge)
+[![Live Demo](https://img.shields.io/badge/DEMO%20ONLINE-Acesse%20Aqui-E91E63?style=for-the-badge&logo=vercel)](https://sigma-loc10.vercel.app/)
+[![Admin Panel](https://img.shields.io/badge/PAINEL%20ADMIN-Backoffice-2E7D32?style=for-the-badge&logo=django)](https://sigma-loc10-production.up.railway.app/admin/)
+![Status](https://img.shields.io/badge/status-MVP%20Finalizado-success?style=for-the-badge)
 ![CI/CD](https://img.shields.io/badge/CI-GitHub%20Actions-blue?style=for-the-badge)
 ![Docker](https://img.shields.io/badge/container-Docker%20Compose-2496ED?style=for-the-badge)
 ![Stack](https://img.shields.io/badge/stack-Next.js%2014%20%7C%20Django%20DRF%20%7C%20Postgres-blue?style=for-the-badge)
@@ -19,9 +19,9 @@
 
 ### Credenciais Administrativas (Backoffice)
 O sistema já vem populado com um superusuário para testes imediatos:
-- **Admin Panel:** [Acessar Backoffice](https://sigma-loc10-production.up.railway.app/admin/)
-- **User:** `admin`
-- **Password:** `admin123`
+- **Painel Admin:** [Acessar Backoffice](https://sigma-loc10-production.up.railway.app/admin/)
+- **Usuário:** `admin`
+- **Senha:** `admin123`
 
 ---
 
@@ -31,19 +31,19 @@ Este projeto é um *Proof of Concept (PoC)* desenvolvido em **menos de 16 horas 
 
 O objetivo foi simular um cenário de pressão real para demonstrar como a união de **Experiência Sênior** (20 anos de mercado) com **Fluxos de IA Modernos** permite entregar software enterprise, testado e documentado, em tempo recorde. Não é apenas sobre codificar rápido, mas sobre arquitetar corretamente desde o primeiro minuto.
 
-## 💎 Filosofia de Engenharia: Ética e Performance
+## 💎 Filosofia de Engenharia
 
-Minha abordagem no desenvolvimento é guiada por dois pilares inegociáveis, nascidos da minha experiência como Analista de Risco e como usuário exigente:
+Minha abordagem no desenvolvimento é guiada por dois pilares inegociáveis:
 
 ### 1. UX-Driven (Obsessão pela Experiência)
 Software lento ou confuso é um desrespeito ao tempo do usuário.
 * **Tolerância Zero à Latência:** Implementei **Optimistic UI** porque o usuário não deve esperar o servidor "pensar" para ver o resultado de sua ação.
-* **Resiliência Visual:** O sistema deve parecer robusto. Tratamento de erros, *loading states* e feedbacks visuais não são "extras", são requisitos éticos de entrega.
+* **Resiliência Visual:** O sistema deve parecer robusto. Tratamento de erros, *loading states* e feedbacks visuais não são "extras", são requisitos essenciais.
 
 ### 2. Risk-Driven (Engenharia Orientada a Risco)
 Segurança e consistência de dados protegem a saúde do negócio.
 * **🛡️ Integridade de Estoque:** Prevenção total de "Overbooking" através de transações atômicas (ACID) no Backend.
-* **📉 Dívida Técnica Controlada:** Adoção de **Service Pattern** no Frontend. A UI desconhece a lógica HTTP, facilitando refatorações futuras sem quebrar a tela do usuário.
+* **📉 Dívida Técnica Controlada:** Adoção de **Service Pattern** no Frontend. A UI desconhece a lógica HTTP, facilitando refatorações futuras.
 
 ---
 
@@ -107,24 +107,21 @@ sequenceDiagram
 
 ---
 
----
+## 🕹️ Roteiro de Teste (Sugestão para Recrutador)
+Para validar o sistema de ponta a ponta, sugiro o seguinte fluxo:
 
-## 🕹️ Jornada do Usuário (Caso de Uso)
-Para validar o sistema, recomendo o seguinte fluxo de teste:
+1. **Visão do Usuário (Frontend):**
+   - Acesse a [Demonstração Online](https://sigma-loc10.vercel.app/).
+   - Navegue pela frota. Observe que a interface é rápida (Server Side Rendering).
+   - Tente alugar um equipamento disponível. O feedback é instantâneo.
 
-1. **Gestão de Ativos (Backoffice):**
+2. **Visão do Administrador (Backoffice):**
    - Acesse o [Painel Admin](https://sigma-loc10-production.up.railway.app/admin/).
-   - Crie um novo equipamento (ex: "Trator CAT D6").
-   - Defina o status como `Available`.
+   - Faça login com as credenciais acima.
+   - Edite um equipamento (ex: mude o status para `MAINTENANCE`).
+   - Volte ao Frontend e dê F5 (ou aguarde a revalidação). O status terá mudado.
 
-2. **Visualização (Frontend):**
-   - Vá para o [Frontend](https://sigma-loc10.vercel.app/).
-   - O novo trator aparecerá instantaneamente (Optimistic UI).
-   - Utilize a barra de busca para filtrar por nome ou status.
-
-3. **Validação de Negócio:**
-   - Tente editar o equipamento para `Rented`.
-   - Observe a mudança de status refletir na listagem pública.
+Isso prova a integração completa entre as partes do sistema.
 
 ---
 
