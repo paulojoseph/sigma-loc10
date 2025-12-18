@@ -48,7 +48,10 @@ Este projeto é um *Proof of Concept (PoC)* de alta fidelidade desenvolvido em *
 
 O objetivo foi simular um cenário de pressão real ("War Room") para demonstrar como a união de **Experiência de Mercado** com **Fluxos de IA Modernos** permite entregar software enterprise, testado e documentado, em tempo recorde. Não é apenas sobre codificar rápido, mas sobre arquitetar corretamente desde o primeiro minuto.
 
-> ℹ️ **Nota sobre Git History:** Optei deliberadamente por não utilizar *Squash commits* neste repositório. O objetivo é manter a transparência absoluta da linha do tempo de 24h, preservando o registro das decisões de infraestrutura e correções de deploy em tempo real. Em um fluxo de trabalho padrão, utilizaria *Squash & Merge* para manter a branch `main` limpa.
+> ℹ️ **Nota sobre Engenharia de Software:**
+>
+> 1. **Git Flow vs. Trunk-Based:** Optei deliberadamente por comitar diretamente na `main` (*Trunk-Based Development*). Em um cenário de "War Room" solo com prazo de 24h, a prioridade foi a **velocity** e a redução do *lead time* de deploy. Em um time distribuído, eu adotaria **Feature Branches** com Code Review obrigatório (Pull Requests).
+> 2. **Histórico de Commits:** Não utilizei *Squash* para preservar a transparência absoluta da linha do tempo de desenvolvimento, incluindo as tentativas e erros na configuração da infraestrutura (Railway/Docker).
 
 <a id="filosofia-de-engenharia"></a>
 ## 💎 Filosofia de Engenharia
