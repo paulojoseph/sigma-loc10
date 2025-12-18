@@ -50,8 +50,8 @@ O objetivo foi simular um cenário de alta pressão para demonstrar como a uniã
 
 > ℹ️ **Nota sobre Engenharia de Software:**
 >
-> 1. **Git Flow vs. Trunk-Based:** Optei deliberadamente por comitar diretamente na `main` (*Trunk-Based Development*). Em um cenário de "War Room" solo, a prioridade foi maximizar a **velocidade de entrega** e reduzir o tempo entre codificação e deploy. Em um time distribuído, a prática padrão seria o uso de *Feature Branches* com *Code Review* (PRs).
-> 2. **Histórico de Commits:** Optei por não utilizar *Squash* para manter a transparência absoluta da linha do tempo. O histórico reflete a realidade de um desenvolvimento acelerado, documentando passo a passo a construção da aplicação e a **resolução dos desafios de infraestrutura** (Docker/Railway) em tempo real.
+> 1. **Git Flow vs. Trunk-Based:** Optei deliberadamente por comitar diretamente na `main` (*Trunk-Based Development*). Em um cenário de "War Room" solo, a prioridade foi maximizar a **velocidade de entrega**. Em um time distribuído, a prática padrão seria o uso de *Feature Branches* com *Code Review* (PRs).
+> 2. **Histórico de Commits:** Optei por não utilizar *Squash* para manter a transparência absoluta da linha do tempo. O histórico reflete a realidade de um desenvolvimento acelerado e a **resolução dos desafios de infraestrutura** (Docker/Railway) em tempo real.
 
 <a id="filosofia-de-engenharia"></a>
 ## 💎 Filosofia de Engenharia
@@ -66,7 +66,7 @@ Software lento ou confuso é um desrespeito ao tempo do usuário.
 ### 2. Risk-Driven (Engenharia Orientada a Risco)
 Segurança e consistência de dados protegem a saúde do negócio.
 * **🛡️ Integridade de Estoque:** Prevenção total de "Overbooking" através de transações atômicas (ACID) no Backend.
-* **📉 Dívida Técnica Controlada:** Adoção de **Service Pattern** no Frontend. A UI desconhece a lógica HTTP, facilitando refatorações futuras.
+* **� Controle de Acesso Estrito:** Ações destrutivas (Deleção de Equipamentos) são restritas exclusivamente ao **Backoffice Administrativo**, prevenindo erros operacionais no Frontend.
 
 ---
 
@@ -89,17 +89,20 @@ graph TD
         FE[Frontend Container<br/>Next.js 14 + React Query]
         API[Backend Container<br/>Django REST Framework]
         DB[(Database<br/>PostgreSQL 16)]
+        REDIS[Redis<br/>Cache & Broker]
     end
 
     Browser ==>|HTTPS / JSON| FE
     FE ==>|Server Side Fetching| API
     Browser -.->|Client Side Interactions| API
     API ==>|Read/Write| DB
+    API -.->|Cache| REDIS
     
     %% Cores Vibrantes (Dark Mode Friendly)
     style FE fill:#1565C0,stroke:#0D47A1,stroke-width:2px,color:#fff,rx:5,ry:5
     style API fill:#2E7D32,stroke:#1B5E20,stroke-width:2px,color:#fff,rx:5,ry:5
     style DB fill:#EF6C00,stroke:#E65100,stroke-width:2px,color:#fff
+    style REDIS fill:#D81B60,stroke:#880E4F,stroke-width:2px,color:#fff
 ```
 
 ### UX na Prática (Optimistic UI)
@@ -129,93 +132,83 @@ sequenceDiagram
     end
 ```
 
----
-
 <a id="roteiro-de-teste"></a>
 ## 🕹️ Roteiro de Teste (Sugestão para Recrutador)
+
 Para validar o sistema de ponta a ponta, sugiro o seguinte fluxo:
 
-1. **Visão do Usuário (Frontend):**
-   - Acesse a [Demonstração Online](https://sigma-loc10.vercel.app/).
-   - Navegue pela frota. Observe que a interface é rápida (Server Side Rendering).
-   - Tente alugar um equipamento disponível. O feedback é instantâneo.
+### Visão do Usuário (Frontend):
+1. Acesse a **Demonstração Online**.
+2. Navegue pela frota. Observe que a interface é rápida (Server Side Rendering).
+3. Tente alugar um equipamento disponível. O feedback é instantâneo.
 
-2. **Visão do Administrador (Backoffice):**
-   - Acesse o [Painel Admin](https://sigma-loc10-production.up.railway.app/admin/).
-   - Faça login com as credenciais acima.
-   - Edite um equipamento (ex: mude o status para `MAINTENANCE` -> **Em Manutenção**).
-   - Volte ao Frontend e dê F5 (ou aguarde a revalidação). O status terá mudado.
+### Visão do Administrador (Backoffice):
+1. Acesse o **Painel Admin**.
+2. Faça login com as credenciais acima.
+3. Edite um equipamento (ex: mude o status para `MAINTENANCE` -> Em Manutenção).
+    *   *Nota: A exclusão física de registros (Hard Delete) só pode ser feita aqui.*
+4. Volte ao Frontend e dê F5 (ou aguarde a revalidação). O status terá mudado.
 
-Isso valida a integração entre as partes do sistema.
-
----
+Isso valida a integração completa entre as partes do sistema.
 
 <a id="stack-tecnologico"></a>
 ## 🛠️ Stack Tecnológico
 
 ### Frontend | Next.js 14 + React Query
 A escolha do stack foi pragmática, focada em resolver dores reais de performance:
-- **TanStack Query (v5):** Elimina a necessidade de useEffect manuais e garante cache inteligente.
-- **Service Layer Desacoplada:** Isolamento total da lógica de API em `src/services`, garantindo tipos estritos (TypeScript).
-- **Design System:** TailwindCSS + Lucide Icons para interface limpa, acessível e consistente.
+*   **TanStack Query (v5):** Elimina a necessidade de useEffect manuais e garante cache inteligente.
+*   **Service Layer Desacoplada:** Isolamento total da lógica de API em `src/services`, garantindo tipos estritos (TypeScript).
+*   **Design System:** TailwindCSS + Lucide Icons para interface limpa, acessível e consistente.
 
 ### Backend | Django REST Framework
 Escolhido pela segurança padrão ("batteries-included") e velocidade de implementação:
-- **Arquitetura Modular:** Separação clara de contextos (`core`, `accounts`, `equipment`) facilitando futura extração para microsserviços.
-- **Django Admin:** Utilizado como Backoffice administrativo, economizando centenas de horas de desenvolvimento.
-- **Serializers:** Validação estrita de entrada (Sanitization) para garantir que nenhum dado sujo entre no banco.
-
----
+*   **Arquitetura Modular:** Separação clara de contextos (core, accounts, equipment) facilitando futura extração para microsserviços.
+*   **Django Admin:** Utilizado como Backoffice administrativo, economizando centenas de horas de desenvolvimento.
+*   **Serializers:** Validação estrita de entrada (Sanitization) para garantir que nenhum dado sujo entre no banco.
 
 <a id="instalacao-e-execucao"></a>
 ## 🚀 Instalação e Execução (Zero-Config)
 
-O ambiente é 100% Dockerizado para garantir que o projeto rode na sua máquina exatamente como roda na minha.
+O ambiente é 100% Dockerizado para execução.
 
-### 📋 Pré-requisitos Obrigatórios
-Para executar este projeto localmente, é mandatório ter instalado:
-- [Docker Desktop (Windows/Mac/Linux)](https://www.docker.com/products/docker-desktop/) - Essencial para orquestrar os containers.
-- Git
+### Pré-requisitos
+*   Docker Desktop
+*   Git
+*   Node.js (Opcional, para melhor DX no VS Code)
 
-### 1. Clone e Suba (Zero-Touch)
+### Passo 1: Preparar Ambiente (Recomendado)
+Para garantir que o Intellisense do VS Code funcione corretamente (autocompletar e tipagem) e evitar erros visuais no editor, recomendamos instalar as dependências do frontend localmente:
 
 ```bash
-git clone https://github.com/paulojoseph/sigma-loc10.git
-cd sigma-loc10
+cd apps/web
+npm install
+cd ../..
+```
 
-# Configure o ambiente
+### Passo 2: Subir a Aplicação
+Execute o comando abaixo na raiz do projeto. Ele irá configurar variáveis de ambiente, criar o banco, rodar migrações e popular o seed.
+
+```bash
+# Copie o env de exemplo
 # Windows: copy .env.example .env
-# Mac/Linux: cp .env.example .env
+# Linux/Mac: cp .env.example .env
 cp .env.example .env
 
 # Sobe todo o ecossistema
-# O script de entrypoint fará automaticamente:
-# 1. Aguardar o Banco
-# 2. Rodar Migrations
-# 3. Carregar dados de teste (Seed)
-# 4. Criar superusuário (admin/admin123)
 docker compose up --build
 ```
+Aguarde até ver a mensagem "Ready in Xms" no terminal.
 
-**Aguarde até ver a mensagem "Ready in Xms" no terminal.**
+### 🔗 Portas de Acesso
+*   **Frontend:** `http://localhost:3000`
+*   **Backoffice (Django Admin):** `http://localhost:8000/admin` (Login: `admin` / Senha: `admin123`)
 
----
-
-## 🔗 Portas de Acesso
-
-- **Frontend:** http://localhost:3000
-- **Backoffice (Django Admin):** http://localhost:8000/admin (Login: `admin` / Senha: `admin123`)
-
----
-
-## 🧪 Qualidade e CI/CD
-
+### 🧪 Qualidade e CI/CD
 Qualidade não é opcional. O projeto conta com pipeline no GitHub Actions validando cada commit:
-- **Frontend Check:** Linting (ESLint) e verificação de Build.
-- **Backend Check:** Testes de integração (Pytest) rodando contra banco PostgreSQL efêmero.
+*   **Frontend Check:** Linting (ESLint) e verificação de Build.
+*   **Backend Check:** Testes de integração (Pytest) rodando contra banco PostgreSQL efêmero.
 
 Para rodar localmente:
-
 ```bash
 # Testes do Backend
 docker compose exec api pytest
@@ -224,43 +217,37 @@ docker compose exec api pytest
 docker compose exec frontend npm run lint
 ```
 
----
-
 <a id="documentacao-estendida"></a>
 ## 📚 Documentação Estendida (Deep Dive)
 
-Para não poluir o README principal, detalhei as decisões de engenharia na pasta [.docs/](.docs/). Recomendo a leitura para entender a profundidade do projeto:
+Para não poluir o README principal, detalhei as decisões de engenharia na pasta `.docs/`. Recomendo a leitura para entender a profundidade do projeto:
 
 | Arquivo | Descrição |
-|---------|-----------|
-| [00_contexto_produto.md](.docs/00_contexto_produto.md) | 🧠 **Visão de Negócio:** O problema real que o software resolve e a filosofia Risk-Driven. |
-| [01_stack_regras.md](.docs/01_stack_regras.md) | 👮 **Linter Humano:** Regras estritas de código, Anti-patterns proibidos e guia de estilo para IA. |
-| [02_arquitetura.md](.docs/02_arquitetura.md) | 📐 **Diagramas:** Detalhamento do fluxo de dados, camadas de serviço e decisões de Clean Arch. |
-| [03_matriz_risco.md](.docs/03_matriz_risco.md) | 🛡️ **Análise de Risco:** Tabela completa de riscos de negócio (Overbooking, Latência) e suas mitigações técnicas. |
-
----
+| :--- | :--- |
+| **00_contexto_produto.md** | 🧠 **Visão de Negócio:** O problema real que o software resolve e a filosofia Risk-Driven. |
+| **01_stack_regras.md** | 👮 **Linter Humano:** Regras estritas de código, Anti-patterns proibidos e guia de estilo para IA. |
+| **02_arquitetura.md** | 📐 **Diagramas:** Detalhamento do fluxo de dados, camadas de serviço e decisões de Clean Arch. |
+| **03_matriz_risco.md** | 🛡️ **Análise de Risco:** Tabela completa de riscos de negócio (Overbooking, Latência) e suas mitigações técnicas. |
 
 <a id="roadmap-estrategico-v20"></a>
 ## 🗺️ Roadmap Estratégico (V2.0)
 
 Este roteiro demonstra como a plataforma evolui de um MVP para uma solução Enterprise escalável.
 
-### � Prioridade ALTA (Confiabilidade & Segurança)
+### 🔴 Prioridade ALTA (Confiabilidade & Segurança)
 Foco em mitigar riscos críticos identificados na Matriz de Risco:
-- [ ] **Locking Pessimista:** Implementação de `select_for_update` em transações de reserva para garantir integridade absoluta de estoque em alta concorrência.
-- [ ] **Autenticação Robusta:** Migração para JWT com rotação de chaves e Refresh Tokens via Cookies HttpOnly.
-- [ ] **Idempotência:** Adicionar keys únicas em requisições de POST para evitar duplicação de contratos em falhas de rede.
+* [ ] **Locking Pessimista:** Implementação de `select_for_update` em transações de reserva para garantir integridade absoluta de estoque em alta concorrência.
+* [ ] **Autenticação Robusta:** Migração para JWT com rotação de chaves e Refresh Tokens via Cookies HttpOnly.
+* [ ] **Idempotência:** Adicionar keys únicas em requisições de POST para evitar duplicação de contratos em falhas de rede.
 
-### ⚡ Evolução Técnica (Performance & Ops)
-- [ ] **Observabilidade:** Instrumentação com OpenTelemetry e visualização no Grafana para rastrear gargalos de latência.
-- [ ] **Cache Distribuído:** Reintrodução do Redis para cache de sessão e *throttling* de API.
-- [ ] **Offline-Ready:** Sincronização em background para permitir que engenheiros de campo operem sem internet (PWA).
+### 🟡 Evolução Técnica (Performance & Ops)
+* [ ] **Observabilidade:** Instrumentação com OpenTelemetry e visualização no Grafana para rastrear gargalos de latência.
+* [ ] **Cache Distribuído:** Reintrodução do Redis para cache de sessão e throttling de API.
+* [ ] **Offline-Ready:** Sincronização em background para permitir que engenheiros de campo operem sem internet (PWA).
 
-### 💼 Expansão de Negócio
-- [ ] **Gateway Financeiro:** Integração Stripe/Asaas para cobrança automatizada.
-- [ ] **Auditoria Fiscal:** Logs imutáveis de todas as transações para compliance.
-
----
+### � Expansão de Negócio
+* [ ] **Gateway Financeiro:** Integração Stripe/Asaas para cobrança automatizada.
+* [ ] **Auditoria Fiscal:** Logs imutáveis de todas as transações para compliance.
 
 ---
-*Desenvolvido por Paulo Marques*
+**Desenvolvido por Paulo Marques**
