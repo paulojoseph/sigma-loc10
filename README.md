@@ -2,6 +2,7 @@
 
 > **Technical Showcase:** Aplicação Full Stack desenvolvida com foco em **Arquitetura Resiliente**, **Escalabilidade** e **Experiência do Usuário (UX)**.
 
+
 <div align="center">
 
 [![Live Demo](https://img.shields.io/badge/DEMO%20ONLINE-Acesse%20Aqui-E91E63?style=for-the-badge&logo=vercel)](https://sigma-loc10.vercel.app/)
@@ -15,10 +16,21 @@
 
 ---
 
+## � Índice
+- [Acesso Rápido e Credenciais](#-acesso-rápido)
+- [Contexto e Filosofia](#-contexto--produtividade)
+- [Arquitetura e Decisões](#-arquitetura-do-sistema)
+- [Jornada de Teste](#-roteiro-de-teste-sugestão-para-recrutador)
+- [Guia de Instalação](#-instalação-e-execução-zero-config)
+- [Roadmap V2.0 (Evolução Técnica)](#-roadmap-estratégico-v20)
+
+---
+
 ## 🚀 Acesso Rápido
 
-### Credenciais Administrativas (Backoffice)
-O sistema já vem populado com um superusuário para testes imediatos:
+### ⚠️ Credenciais de Demonstração
+O sistema já vem populado com um superusuário para testes imediatos. **Não utilize em produção.**
+
 - **Painel Admin:** [Acessar Backoffice](https://sigma-loc10-production.up.railway.app/admin/)
 - **Usuário:** `admin`
 - **Senha:** `admin123`
@@ -199,8 +211,6 @@ docker compose exec frontend npm run lint
 
 ---
 
----
-
 ## 📚 Documentação Estendida (Deep Dive)
 
 Para não poluir o README principal, detalhei as decisões de engenharia na pasta [.docs/](.docs/). Recomendo a leitura para entender a profundidade do projeto:
@@ -216,17 +226,22 @@ Para não poluir o README principal, detalhei as decisões de engenharia na past
 
 ## 🗺️ Roadmap Estratégico (V2.0)
 
-Esta visão de futuro demonstra como o produto escala de um MVP para uma plataforma Enterprise completa:
+Este roteiro demonstra como a plataforma evolui de um MVP para uma solução Enterprise escalável.
+
+### � Prioridade ALTA (Confiabilidade & Segurança)
+Foco em mitigar riscos críticos identificados na Matriz de Risco:
+- [ ] **Locking Pessimista:** Implementação de `select_for_update` em transações de reserva para garantir integridade absoluta de estoque em alta concorrência.
+- [ ] **Autenticação Robusta:** Migração para JWT com rotação de chaves e Refresh Tokens via Cookies HttpOnly.
+- [ ] **Idempotência:** Adicionar keys únicas em requisições de POST para evitar duplicação de contratos em falhas de rede.
+
+### ⚡ Evolução Técnica (Performance & Ops)
+- [ ] **Observabilidade:** Instrumentação com OpenTelemetry e visualização no Grafana para rastrear gargalos de latência.
+- [ ] **Cache Distribuído:** Reintrodução do Redis para cache de sessão e *throttling* de API.
+- [ ] **Offline-Ready:** Sincronização em background para permitir que engenheiros de campo operem sem internet (PWA).
 
 ### 💼 Expansão de Negócio
-- [ ] **Módulo Financeiro:** Integração com Gateway de Pagamentos (Stripe/Asaas) para cobrança automática e cálculo de multas.
-- [ ] **Gestão de Contratos:** Geração automática de PDFs jurídicos com assinatura digital (DocuSign API).
-- [ ] **Multi-Tenancy:** Suporte a múltiplas filiais ou empresas (SaaS) com isolamento lógico de dados (Row Level Security).
-
-### 🛠️ Evolução Técnica
-- [ ] **Observabilidade Total:** Implementação de OpenTelemetry + Grafana para rastrear latência distribuída.
-- [ ] **Offline-First App:** Versão PWA/Mobile utilizando SQLite local (WatermelonDB) para operadores de campo sem internet.
-- [ ] **Auditoria (Compliance):** Logs imutáveis de todas as ações sensíveis (Quem mudou o status? Quando? Por quê?) para auditoria fiscal.
+- [ ] **Gateway Financeiro:** Integração Stripe/Asaas para cobrança automatizada.
+- [ ] **Auditoria Fiscal:** Logs imutáveis de todas as transações para compliance.
 
 ---
 
