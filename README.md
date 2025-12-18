@@ -4,14 +4,24 @@
 
 <div align="center">
 
-[![Live Demo](https://img.shields.io/badge/LIVE%20DEMO-Acesse%20Aqui-E91E63?style=for-the-badge&logo=vercel)](SEU_LINK_VERCEL)
-[![API Docs](https://img.shields.io/badge/API%20REST-Documentação-2E7D32?style=for-the-badge&logo=django)](SEU_LINK_RAILWAY/api/)
+[![Live Demo](https://img.shields.io/badge/LIVE%20DEMO-Acesse%20Aqui-E91E63?style=for-the-badge&logo=vercel)](https://sigma-loc10.vercel.app/)
+[![API Docs](https://img.shields.io/badge/API%20REST-Documentação-2E7D32?style=for-the-badge&logo=django)](https://sigma-loc10-production.up.railway.app/admin/)
 ![Status](https://img.shields.io/badge/status-MVP%20Complete-success?style=for-the-badge)
 ![CI/CD](https://img.shields.io/badge/CI-GitHub%20Actions-blue?style=for-the-badge)
 ![Docker](https://img.shields.io/badge/container-Docker%20Compose-2496ED?style=for-the-badge)
 ![Stack](https://img.shields.io/badge/stack-Next.js%2014%20%7C%20Django%20DRF%20%7C%20Postgres-blue?style=for-the-badge)
 
 </div>
+
+---
+
+## 🚀 Acesso Rápido
+
+### Credenciais Administrativas (Backoffice)
+O sistema já vem populado com um superusuário para testes imediatos:
+- **Admin Panel:** [Acessar Backoffice](https://sigma-loc10-production.up.railway.app/admin/)
+- **User:** `admin`
+- **Password:** `admin123`
 
 ---
 
@@ -94,6 +104,27 @@ sequenceDiagram
         UI-->>User: Notificação de Erro
     end
 ```
+
+---
+
+---
+
+## 🕹️ Jornada do Usuário (Caso de Uso)
+Para validar o sistema, recomendo o seguinte fluxo de teste:
+
+1. **Gestão de Ativos (Backoffice):**
+   - Acesse o [Painel Admin](https://sigma-loc10-production.up.railway.app/admin/).
+   - Crie um novo equipamento (ex: "Trator CAT D6").
+   - Defina o status como `Available`.
+
+2. **Visualização (Frontend):**
+   - Vá para o [Frontend](https://sigma-loc10.vercel.app/).
+   - O novo trator aparecerá instantaneamente (Optimistic UI).
+   - Utilize a barra de busca para filtrar por nome ou status.
+
+3. **Validação de Negócio:**
+   - Tente editar o equipamento para `Rented`.
+   - Observe a mudança de status refletir na listagem pública.
 
 ---
 

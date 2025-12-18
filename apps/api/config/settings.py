@@ -201,7 +201,9 @@ SIMPLE_JWT = {
     'AUTH_HEADER_TYPES': ('Bearer',),
 }
 
-# --- EXTENDED LOGGING (For Debugging 502 Errors) ---
+
+# --- LOGGING CONFIGURATION ---
+# Captures all logs (INFO+) to console for container observability
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
@@ -219,24 +221,24 @@ LOGGING = {
     },
     'root': {
         'handlers': ['console'],
-        'level': 'DEBUG',
+        'level': 'INFO',
     },
     'loggers': {
         'django': {
             'handlers': ['console'],
-            'level': 'DEBUG',
+            'level': 'INFO',
             'propagate': True,
         },
         'gunicorn': {
             'handlers': ['console'],
-            'level': 'DEBUG',
+            'level': 'INFO',
             'propagate': True,
         },
     },
 }
 
-# --- CACHE LOCAL (Diagnóstico para Eliminar Redis) ---
-# Usamos memória local para garantir que o site suba mesmo sem Redis
+# --- CACHE CONFIGURATION ---
+# Using Local Memory Cache to minimize external dependencies (Redis-free architecture)
 CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
@@ -244,5 +246,6 @@ CACHES = {
     }
 }
 
-# Voltar sessão para o banco (mais seguro por enquanto)
+# SESSION CONFIGURATION
+# Using DB sessions for reliability
 SESSION_ENGINE = "django.contrib.sessions.backends.db"
