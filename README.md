@@ -17,15 +17,15 @@
 ---
 
 ## 📑 Índice
-- [🚀 Acesso Rápido](#-acesso-rápido)
-- [🎯 Contexto & Produtividade](#-contexto--produtividade)
-- [💎 Filosofia de Engenharia](#-filosofia-de-engenharia)
-- [🏗️ Arquitetura do Sistema](#-arquitetura-do-sistema)
-- [🕹️ Roteiro de Teste](#-roteiro-de-teste-sugestão-para-recrutador)
-- [🛠️ Stack Tecnológico](#-stack-tecnológico)
-- [🚀 Instalação e Execução](#-instalação-e-execução-zero-config)
-- [📚 Documentação Estendida](#-documentação-estendida-deep-dive)
-- [🗺️ Roadmap Estratégico](#-roadmap-estratégico-v20)
+- [🚀 Acesso Rápido](#acesso-rápido)
+- [🎯 Contexto & Produtividade](#contexto--produtividade)
+- [💎 Filosofia de Engenharia](#filosofia-de-engenharia)
+- [🏗️ Arquitetura do Sistema](#arquitetura-do-sistema)
+- [🕹️ Roteiro de Teste](#roteiro-de-teste-sugestão-para-recrutador)
+- [🛠️ Stack Tecnológico](#stack-tecnológico)
+- [🚀 Instalação e Execução](#instalação-e-execução-zero-config)
+- [📚 Documentação Estendida](#documentação-estendida-deep-dive)
+- [🗺️ Roadmap Estratégico](#roadmap-estratégico-v20)
 
 ---
 
