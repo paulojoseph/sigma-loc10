@@ -16,13 +16,16 @@
 
 ---
 
-## � Índice
-- [Acesso Rápido e Credenciais](#-acesso-rápido)
-- [Contexto e Filosofia](#-contexto--produtividade)
-- [Arquitetura e Decisões](#-arquitetura-do-sistema)
-- [Jornada de Teste](#-roteiro-de-teste-sugestão-para-recrutador)
-- [Guia de Instalação](#-instalação-e-execução-zero-config)
-- [Roadmap V2.0 (Evolução Técnica)](#-roadmap-estratégico-v20)
+## 📑 Índice
+- [🚀 Acesso Rápido](#-acesso-rápido)
+- [🎯 Contexto & Produtividade](#-contexto--produtividade)
+- [💎 Filosofia de Engenharia](#-filosofia-de-engenharia)
+- [🏗️ Arquitetura do Sistema](#-arquitetura-do-sistema)
+- [🕹️ Roteiro de Teste](#-roteiro-de-teste-sugestão-para-recrutador)
+- [🛠️ Stack Tecnológico](#-stack-tecnológico)
+- [🚀 Instalação e Execução](#-instalação-e-execução-zero-config)
+- [📚 Documentação Estendida](#-documentação-estendida-deep-dive)
+- [🗺️ Roadmap Estratégico](#-roadmap-estratégico-v20)
 
 ---
 
