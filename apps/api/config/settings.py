@@ -18,7 +18,6 @@ ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='127.0.0.1,localhost', cast=Csv(
 # Application definition
 INSTALLED_APPS = [
     'corsheaders',        
-    'rest_framework',      
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -27,6 +26,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     
     # Third party
+    'rest_framework',      
 
     # Local
     'accounts',
@@ -37,14 +37,14 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',      # CORS deve ser logo no início
-    'django.middleware.common.CommonMiddleware',
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware', # WhiteNoise para estáticos
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware', # WhiteNoise para estáticos
 ]
 
 ROOT_URLCONF = 'config.urls'
@@ -157,7 +157,17 @@ CORS_ALLOWED_ORIGIN_REGEXES = [
 ]
 
 # CORS_ALLOW_ALL_ORIGINS = False
-# CORS_ALLOW_CREDENTIALS = False
+CORS_ALLOW_CREDENTIALS = False
+
+CORS_ALLOW_METHODS = [
+    "GET",
+    "POST",
+    "PUT",
+    "PATCH",
+    "DELETE",
+    "OPTIONS",
+]
+
 
 CORS_EXPOSE_HEADERS = [
     "Content-Type",
