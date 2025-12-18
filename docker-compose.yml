@@ -70,7 +70,7 @@ services:
     environment:
       - NODE_ENV=development
       - WATCHPACK_POLLING=true
-      - NEXT_PUBLIC_API_URL=http://localhost:8000 # Necessário para o front falar com o back local
+      - NEXT_PUBLIC_API_URL=http://localhost:8000/api
     env_file:
       - .env 
     command: npm run dev
