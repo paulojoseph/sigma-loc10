@@ -27,9 +27,9 @@ O sistema já vem populado com um superusuário para testes imediatos:
 
 ## 🎯 Contexto & Produtividade
 
-Este projeto é um *Proof of Concept (PoC)* desenvolvido em **menos de 16 horas corridas**.
+Este projeto é um *Proof of Concept (PoC)* desenvolvido em **menos de 24 horas corridas**.
 
-O objetivo foi simular um cenário de pressão real para demonstrar como a união de **Experiência Sênior** (20 anos de mercado) com **Fluxos de IA Modernos** permite entregar software enterprise, testado e documentado, em tempo recorde. Não é apenas sobre codificar rápido, mas sobre arquitetar corretamente desde o primeiro minuto.
+O objetivo foi simular um cenário de pressão real para demonstrar como a união de **Experiência de Mercado** com **Fluxos de IA Modernos** permite entregar software enterprise, testado e documentado, em tempo recorde. Não é apenas sobre codificar rápido, mas sobre arquitetar corretamente desde o primeiro minuto.
 
 ## 💎 Filosofia de Engenharia
 
@@ -118,10 +118,10 @@ Para validar o sistema de ponta a ponta, sugiro o seguinte fluxo:
 2. **Visão do Administrador (Backoffice):**
    - Acesse o [Painel Admin](https://sigma-loc10-production.up.railway.app/admin/).
    - Faça login com as credenciais acima.
-   - Edite um equipamento (ex: mude o status para `MAINTENANCE`).
+   - Edite um equipamento (ex: mude o status para `MAINTENANCE` -> **Em Manutenção**).
    - Volte ao Frontend e dê F5 (ou aguarde a revalidação). O status terá mudado.
 
-Isso prova a integração completa entre as partes do sistema.
+Isso valida a integração entre as partes do sistema.
 
 ---
 
@@ -199,22 +199,36 @@ docker compose exec frontend npm run lint
 
 ---
 
+---
+
 ## 📚 Documentação Estendida (Deep Dive)
 
-Para não poluir o README principal, detalhei as decisões de engenharia na pasta `.docs/`. Recomendo a leitura para entender a profundidade do projeto:
+Para não poluir o README principal, detalhei as decisões de engenharia na pasta [.docs/](.docs/). Recomendo a leitura para entender a profundidade do projeto:
 
 | Arquivo | Descrição |
 |---------|-----------|
-| `00_contexto_produto.md` | 🧠 **Visão de Negócio:** O problema real que o software resolve e a filosofia Risk-Driven. |
-| `01_stack_regras.md` | 👮 **Linter Humano:** Regras estritas de código, Anti-patterns proibidos e guia de estilo para IA. |
-| `02_arquitetura.md` | 📐 **Diagramas:** Detalhamento do fluxo de dados, camadas de serviço e decisões de Clean Arch. |
-| `03_matriz_risco.md` | 🛡️ **Análise de Risco:** Tabela completa de riscos de negócio (Overbooking, Latência) e suas mitigações técnicas. |
+| [00_contexto_produto.md](.docs/00_contexto_produto.md) | 🧠 **Visão de Negócio:** O problema real que o software resolve e a filosofia Risk-Driven. |
+| [01_stack_regras.md](.docs/01_stack_regras.md) | 👮 **Linter Humano:** Regras estritas de código, Anti-patterns proibidos e guia de estilo para IA. |
+| [02_arquitetura.md](.docs/02_arquitetura.md) | 📐 **Diagramas:** Detalhamento do fluxo de dados, camadas de serviço e decisões de Clean Arch. |
+| [03_matriz_risco.md](.docs/03_matriz_risco.md) | 🛡️ **Análise de Risco:** Tabela completa de riscos de negócio (Overbooking, Latência) e suas mitigações técnicas. |
 
-## 🗺️ Roadmap (V2.0)
-Melhorias mapeadas para a próxima sprint:
-- [ ] **Segurança:** Implementar autenticação via JWT com rotação de chaves.
-- [ ] **Concorrência:** Adicionar `select_for_update` no Postgres para travar linhas em cenários de alta concorrência.
-- [ ] **Infra:** Deploy automatizado na Vercel (Front) e Railway (Back).
+---
+
+## 🗺️ Roadmap Estratégico (V2.0)
+
+Esta visão de futuro demonstra como o produto escala de um MVP para uma plataforma Enterprise completa:
+
+### 💼 Expansão de Negócio
+- [ ] **Módulo Financeiro:** Integração com Gateway de Pagamentos (Stripe/Asaas) para cobrança automática e cálculo de multas.
+- [ ] **Gestão de Contratos:** Geração automática de PDFs jurídicos com assinatura digital (DocuSign API).
+- [ ] **Multi-Tenancy:** Suporte a múltiplas filiais ou empresas (SaaS) com isolamento lógico de dados (Row Level Security).
+
+### 🛠️ Evolução Técnica
+- [ ] **Observabilidade Total:** Implementação de OpenTelemetry + Grafana para rastrear latência distribuída.
+- [ ] **Offline-First App:** Versão PWA/Mobile utilizando SQLite local (WatermelonDB) para operadores de campo sem internet.
+- [ ] **Auditoria (Compliance):** Logs imutáveis de todas as ações sensíveis (Quem mudou o status? Quando? Por quê?) para auditoria fiscal.
+
+---
 
 ---
 *Desenvolvido por Paulo Marques*
