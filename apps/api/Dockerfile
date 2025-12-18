@@ -5,8 +5,8 @@ ENV DJANGO_SETTINGS_MODULE=config.settings
 
 WORKDIR /usr/src/app
 
-# Copia requirements.txt usando caminho absoluto no contexto
-COPY apps/api/requirements.txt ./requirements.txt
+# CORREÇÃO AQUI: Removemos 'apps/api/' pois já estamos dentro dela pelo contexto
+COPY requirements.txt ./requirements.txt
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
   postgresql-client \
@@ -17,8 +17,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   && pip install gunicorn \
   && rm -rf /var/lib/apt/lists/*
 
-# Copia todo o código da API
-COPY apps/api/ .
+# CORREÇÃO AQUI: Copia tudo do contexto atual (.) para o container (.)
+COPY . .
 
 RUN chmod +x entrypoint.sh
 
