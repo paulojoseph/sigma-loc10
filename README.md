@@ -17,18 +17,19 @@
 ---
 
 ## 📑 Índice
-- [🚀 Acesso Rápido](#-acesso-rápido)
-- [🎯 Contexto & Produtividade](#-contexto--produtividade)
-- [💎 Filosofia de Engenharia](#-filosofia-de-engenharia)
-- [🏗️ Arquitetura do Sistema](#-arquitetura-do-sistema)
-- [🕹️ Roteiro de Teste](#-roteiro-de-teste-sugestão-para-recrutador)
-- [🛠️ Stack Tecnológico](#-stack-tecnológico)
-- [🚀 Instalação e Execução](#-instalação-e-execução-zero-config)
-- [📚 Documentação Estendida](#-documentação-estendida-deep-dive)
-- [🗺️ Roadmap Estratégico](#-roadmap-estratégico-v20)
+- [🚀 Acesso Rápido](#acesso-rapido)
+- [🎯 Contexto & Produtividade](#contexto-produtividade)
+- [💎 Filosofia de Engenharia](#filosofia-de-engenharia)
+- [🏗️ Arquitetura do Sistema](#arquitetura-do-sistema)
+- [🕹️ Roteiro de Teste](#roteiro-de-teste)
+- [🛠️ Stack Tecnológico](#stack-tecnologico)
+- [🚀 Instalação e Execução](#instalacao-e-execucao)
+- [📚 Documentação Estendida](#documentacao-estendida)
+- [🗺️ Roadmap Estratégico](#roadmap-estrategico-v20)
 
 ---
 
+<a id="acesso-rapido"></a>
 ## 🚀 Acesso Rápido
 
 ### ⚠️ Credenciais de Demonstração
@@ -40,12 +41,14 @@ O sistema já vem populado com um superusuário para testes imediatos. **Não ut
 
 ---
 
+<a id="contexto-produtividade"></a>
 ## 🎯 Contexto & Produtividade
 
 Este projeto é um *Proof of Concept (PoC)* desenvolvido em **menos de 24 horas corridas**.
 
 O objetivo foi simular um cenário de pressão real para demonstrar como a união de **Experiência de Mercado** com **Fluxos de IA Modernos** permite entregar software enterprise, testado e documentado, em tempo recorde. Não é apenas sobre codificar rápido, mas sobre arquitetar corretamente desde o primeiro minuto.
 
+<a id="filosofia-de-engenharia"></a>
 ## 💎 Filosofia de Engenharia
 
 Minha abordagem no desenvolvimento é guiada por dois pilares inegociáveis:
@@ -62,6 +65,7 @@ Segurança e consistência de dados protegem a saúde do negócio.
 
 ---
 
+<a id="arquitetura-do-sistema"></a>
 ## 🏗️ Arquitetura do Sistema
 
 A solução foi orquestrada via Docker Compose para garantir paridade entre desenvolvimento e produção.
@@ -122,6 +126,7 @@ sequenceDiagram
 
 ---
 
+<a id="roteiro-de-teste"></a>
 ## 🕹️ Roteiro de Teste (Sugestão para Recrutador)
 Para validar o sistema de ponta a ponta, sugiro o seguinte fluxo:
 
@@ -140,6 +145,7 @@ Isso valida a integração entre as partes do sistema.
 
 ---
 
+<a id="stack-tecnologico"></a>
 ## 🛠️ Stack Tecnológico
 
 ### Frontend | Next.js 14 + React Query
@@ -156,6 +162,7 @@ Escolhido pela segurança padrão ("batteries-included") e velocidade de impleme
 
 ---
 
+<a id="instalacao-e-execucao"></a>
 ## 🚀 Instalação e Execução (Zero-Config)
 
 O ambiente é 100% Dockerizado para garantir que o projeto rode na sua máquina exatamente como roda na minha.
@@ -214,6 +221,7 @@ docker compose exec frontend npm run lint
 
 ---
 
+<a id="documentacao-estendida"></a>
 ## 📚 Documentação Estendida (Deep Dive)
 
 Para não poluir o README principal, detalhei as decisões de engenharia na pasta [.docs/](.docs/). Recomendo a leitura para entender a profundidade do projeto:
@@ -227,6 +235,7 @@ Para não poluir o README principal, detalhei as decisões de engenharia na past
 
 ---
 
+<a id="roadmap-estrategico-v20"></a>
 ## 🗺️ Roadmap Estratégico (V2.0)
 
 Este roteiro demonstra como a plataforma evolui de um MVP para uma solução Enterprise escalável.
