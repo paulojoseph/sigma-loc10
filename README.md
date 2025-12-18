@@ -44,14 +44,14 @@ O sistema já vem populado com um superusuário para testes imediatos. **Não ut
 <a id="contexto-produtividade"></a>
 ## 🎯 Contexto & Produtividade
 
-Este projeto é um *Proof of Concept (PoC)* de alta fidelidade desenvolvido em **menos de 24 horas corridas**.
+Este projeto é um *Proof of Concept (PoC)* de alta fidelidade desenvolvido em um ciclo curto de **48 horas corridas** (Sprint Solo).
 
-O objetivo foi simular um cenário de pressão real ("War Room") para demonstrar como a união de **Experiência de Mercado** com **Fluxos de IA Modernos** permite entregar software enterprise, testado e documentado, em tempo recorde. Não é apenas sobre codificar rápido, mas sobre arquitetar corretamente desde o primeiro minuto.
+O objetivo foi simular um cenário de alta pressão para demonstrar como a união de **Experiência de Mercado** com **Ferramentas de Produtividade** permite entregar software enterprise, com infraestrutura real e documentação técnica, em tempo recorde.
 
 > ℹ️ **Nota sobre Engenharia de Software:**
 >
-> 1. **Git Flow vs. Trunk-Based:** Optei deliberadamente por comitar diretamente na `main` (*Trunk-Based Development*). Em um cenário de "War Room" solo com prazo de 24h, a prioridade foi a **velocity** e a redução do *lead time* de deploy. Em um time distribuído, eu adotaria **Feature Branches** com Code Review obrigatório (Pull Requests).
-> 2. **Histórico de Commits:** Não utilizei *Squash* para preservar a transparência absoluta da linha do tempo de desenvolvimento, incluindo as tentativas e erros na configuração da infraestrutura (Railway/Docker).
+> 1. **Git Flow vs. Trunk-Based:** Optei deliberadamente por comitar diretamente na `main` (*Trunk-Based Development*). Em um cenário de "War Room" solo, a prioridade foi maximizar a **velocidade de entrega** e reduzir o tempo entre codificação e deploy. Em um time distribuído, a prática padrão seria o uso de *Feature Branches* com *Code Review* (PRs).
+> 2. **Histórico de Commits:** Optei por não utilizar *Squash* para manter a transparência absoluta da linha do tempo. O histórico reflete a realidade de um desenvolvimento acelerado, documentando passo a passo a construção da aplicação e a **resolução dos desafios de infraestrutura** (Docker/Railway) em tempo real.
 
 <a id="filosofia-de-engenharia"></a>
 ## 💎 Filosofia de Engenharia
