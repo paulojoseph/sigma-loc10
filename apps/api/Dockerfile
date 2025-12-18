@@ -5,8 +5,8 @@ ENV DJANGO_SETTINGS_MODULE=config.settings
 
 WORKDIR /usr/src/app
 
-# CORREÇÃO AQUI: Removemos 'apps/api/' pois já estamos dentro dela pelo contexto
-COPY requirements.txt ./requirements.txt
+# REVERTIDO: Usa o caminho completo a partir da raiz
+COPY apps/api/requirements.txt ./requirements.txt
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
   postgresql-client \
@@ -17,8 +17,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   && pip install gunicorn \
   && rm -rf /var/lib/apt/lists/*
 
-# CORREÇÃO AQUI: Copia tudo do contexto atual (.) para o container (.)
-COPY . .
+# REVERTIDO: Copia a pasta api específica
+COPY apps/api/ .
 
 RUN chmod +x entrypoint.sh
 

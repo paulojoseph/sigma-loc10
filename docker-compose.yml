@@ -31,8 +31,8 @@ services:
   # --- Backend (Django) ---
   api: # <--- AGORA ESTÁ ALINHADO CORRETAMENTE
     build:
-      context: ./apps/api
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: apps/api/Dockerfile
     command: >
       sh -c "python manage.py migrate --no-input &&
              python manage.py loaddata fixtures/initial_data.json || true &&
